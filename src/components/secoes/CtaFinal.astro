@@ -1,0 +1,20 @@
+---
+// 7.13 CTA final. Logo sobre placa branca até chegar a versão para fundo escuro (P-15).
+import Logo from '../Logo.astro';
+---
+<section id="comecar" aria-labelledby="titulo-comecar" class="fundo-escuro relative overflow-hidden bg-petroleo py-16 text-center md:py-24">
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-[radial-gradient(50rem_24rem_at_50%_120%,rgb(0_184_217/0.22),transparent_70%)]"></div>
+  <div class="container-lp relative max-w-3xl">
+    <div class="mx-auto inline-flex rounded-2xl bg-branco px-5 py-3">
+      <Logo variante="reduzida" class="h-10 w-auto" carregamento="lazy" />
+    </div>
+    <h2 id="titulo-comecar" class="h2 mt-8 text-branco">
+      Não estude apenas para encontrar respostas. <span class="text-dourado">Aprenda a construir o raciocínio que leva até elas.</span>
+    </h2>
+    <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+      <a href="#colecoes" class="btn btn-primario">Ver coleções</a>
+      <a href="#amostra" class="btn btn-contorno-claro">Receber amostra grátis</a>
+    </div>
+    <p class="mt-5 text-sm text-branco/80">Materiais digitais em PDF para leitura e impressão pessoal.</p>
+  </div>
+</section>

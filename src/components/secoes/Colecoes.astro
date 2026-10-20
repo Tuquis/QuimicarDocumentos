@@ -1,0 +1,84 @@
+---
+// 7.3 As coleções — cards gerados de src/content/produtos/*.yaml
+import { Picture } from 'astro:assets';
+import TituloSecao from '../TituloSecao.astro';
+import BotaoProduto from '../BotaoProduto.astro';
+import Preco from '../Preco.astro';
+import Selo from '../Selo.astro';
+import Icone from '../Icone.astro';
+import { getProdutos, imagem } from '@/lib/conteudo';
+
+const { lista } = await getProdutos();
+const destaque = (id: string) => id === 'completo';
+// Na Fase 2, "Ver o que vem" aponta para a página do produto.
+const linkDetalhe = (p: (typeof lista)[number]) => (p.pagina_publicada ? `/materiais/quimicar-${p.id}` : p.ancora_demonstracao);
+---
+<section id="colecoes" aria-labelledby="titulo-colecoes" class="secao bg-cinza-claro/50">
+  <div class="container-lp">
+    <TituloSecao id="titulo-colecoes" rotulo="Coleções" centralizado>
+      Conheça as coleções QUIMICAR
+      <p slot="intro">
+        Duas coleções complementares, para diferentes momentos da sua preparação: da construção dos conhecimentos à aplicação do raciocínio em questões do ENEM.
+      </p>
+    </TituloSecao>
+  </div>
+
+  <div class="container-lp px-0 sm:px-6 lg:px-8">
+    <ul
+      class="scrollbar-oculta flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pt-3 pb-6 sm:px-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0"
+      aria-label="Coleções disponíveis"
+    >
+      {lista.map((p) => (
+        <li
+          data-ver-colecao={p.id}
+          class:list={[
+            'relative flex w-[84%] shrink-0 snap-center flex-col rounded-[18px] bg-branco p-5 shadow-cartao sm:w-[60%] md:w-auto md:p-6',
+            destaque(p.id) && 'ring-2 ring-dourado md:-translate-y-2',
+          ]}
+        >
+          {p.selo && <Selo tipo="destaque" class="absolute -top-3 left-5">{p.selo}</Selo>}
+
+          <div class:list={['relative mb-5 flex h-48 items-end justify-center overflow-hidden rounded-xl bg-gradient-to-b from-cinza-claro to-cinza-claro/30 pt-4', p.imagens_card.length > 1 && 'gap-0']}>
+            {p.imagens_card.map((c, i) => (
+              <Picture
+                src={imagem(c)}
+                alt=""
+                formats={['avif', 'webp']}
+                fallbackFormat="jpg"
+                widths={[240, 400]}
+                sizes="200px"
+                quality={70}
+                loading="lazy"
+                class:list={[
+                  'h-auto w-[46%] rounded-t-md shadow-[0_-4px_18px_-6px_rgb(11_35_66/0.35)]',
+                  p.imagens_card.length > 1 && (i === 0 ? '-mr-6 -rotate-6 translate-y-3' : 'z-10 rotate-3'),
+                ]}
+              />
+            ))}
+          </div>
+
+          <h3 class="font-titulo text-xl font-extrabold tracking-tight">{p.nome}</h3>
+          <p class="mt-2 text-[15px] leading-6 md:text-base">{p.descricao_curta}</p>
+
+          <ul class="mt-4 space-y-2 border-t border-cinza-claro pt-4 text-[15px] leading-6" aria-label={`O que vem no ${p.nome}`}>
+            {p.composicao.map((c) => (
+              <li class="flex items-start gap-2.5">
+                <Icone nome="check" class="mt-1 size-4 text-[#0b6b61]" />
+                <span><strong class="font-titulo font-bold text-petroleo">{c.quantidade}</strong> {c.item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="mt-auto pt-6">
+            <Preco produto={p} />
+            <BotaoProduto produto={p} class="mt-4 w-full" variante={destaque(p.id) ? 'primario' : 'secundario'} />
+            <a href={linkDetalhe(p)} class="mt-3 flex min-h-11 items-center justify-center gap-1.5 font-titulo text-[15px] font-bold text-turquesa-texto underline-offset-4 hover:underline">
+              Ver o que vem <Icone nome="seta" class="size-4" />
+            </a>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <p class="container-lp mt-6 text-center text-sm text-cinza-medio">Materiais digitais em PDF para leitura e impressão pessoal.</p>
+</section>

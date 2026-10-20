@@ -1,0 +1,47 @@
+# QUIMICAR APLICA — 50 questões oficiais analisadas + 50 desafios autorais.
+id: aplica
+ordem: 2
+nome: QUIMICAR APLICA
+status: rascunho
+subtitulo: Método visual de análise e aplicação de questões de Química do ENEM.
+proposta: Um método para compreender questões do ENEM e aprender a resolver novos desafios.
+descricao_curta: >-
+  Método visual com análise de 50 questões de Química do ENEM de 2023, 2024 e 2025
+  e 50 desafios autorais com resolução.
+descricao: >-
+  Aprenda a analisar uma questão do ENEM e a aplicar o raciocínio em uma nova situação.
+  O QUIMICAR APLICA conduz você da leitura das pistas à compreensão dos conceitos, à
+  tentativa de um desafio autoral e à revisão do próprio caminho de resolução.
+composicao:
+  - item: Raio-X da Questão
+    quantidade: 50
+  - item: A Ciência por Trás da Questão
+    quantidade: 50
+  - item: Desafios de Aplicação (questões autorais)
+    quantidade: 50
+  - item: Resoluções Inteligentes
+    quantidade: 50
+indicacao: Quem quer aprender a interpretar questões reais do ENEM e aplicar o raciocínio em situações novas.
+sequencia_de_uso:
+  - Analise a questão-base no Raio-X.
+  - Compreenda a ciência envolvida.
+  - Tente o desafio sem consultar a resolução.
+  - Compare o seu raciocínio com a Resolução Inteligente e revise.
+temas: []                         # P-04
+distribuicao_por_ano: null        # P-06 — ex.: { "2023": 16, "2024": 17, "2025": 17 }
+total_pdfs: null
+total_paginas: null
+preco: null
+parcelamento: null
+checkout_url: null
+prazo_entrega: null
+duracao_acesso: null
+atualizacoes: null
+capa: null
+imagens_card:
+  - amostras/aplica-q100-enem2025/raio-x-1.webp
+galeria: []
+selo: null
+cta_label: Quero o QUIMICAR APLICA
+ancora_demonstracao: "#por-dentro-aplica"
+pagina_publicada: false

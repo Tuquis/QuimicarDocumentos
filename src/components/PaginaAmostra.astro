@@ -1,0 +1,52 @@
+---
+// Miniatura de página real que abre o lightbox (PhotoSwipe). Sem JS, o link
+// abre a imagem ampliada diretamente.
+import { Picture, getImage } from 'astro:assets';
+import { imagem } from '@/lib/conteudo';
+import Icone from './Icone.astro';
+
+interface Props {
+  caminho: string;
+  alt: string;
+  legenda: string;
+  sizes?: string;
+  class?: string;
+  classeImagem?: string;
+  mostrarLegenda?: boolean;
+  /** Miniatura escondida (só navegação dentro do lightbox). */
+  oculta?: boolean;
+}
+const { caminho, alt, legenda, sizes = '(min-width: 1024px) 480px, 90vw', class: classe = '', classeImagem = '', mostrarLegenda = true, oculta = false } = Astro.props;
+const src = imagem(caminho);
+const larguraZoom = Math.min(1200, src.width);
+const zoom = await getImage({ src, width: larguraZoom, format: 'webp', quality: 82 });
+const alturaZoom = Math.round((src.height / src.width) * larguraZoom);
+---
+<figure class:list={[classe, oculta && 'hidden']}>
+  <a
+    href={zoom.src}
+    data-galeria-item
+    data-pswp-width={larguraZoom}
+    data-pswp-height={alturaZoom}
+    data-legenda={legenda}
+    class="group relative block overflow-hidden rounded-xl bg-branco shadow-cartao ring-1 ring-petroleo/10 transition-shadow hover:shadow-[0_12px_32px_-10px_rgb(11_35_66/0.35)]"
+    aria-label={`Ampliar: ${legenda}`}
+  >
+    <Picture
+      src={src}
+      alt={alt}
+      formats={['avif', 'webp']}
+      fallbackFormat="jpg"
+      widths={[480, 960].filter((w) => w <= src.width)}
+      sizes={sizes}
+      quality={75}
+      loading="lazy"
+      decoding="async"
+      class:list={['h-auto w-full', classeImagem]}
+    />
+    <span class="absolute right-2 bottom-2 inline-flex items-center gap-1.5 rounded-full bg-petroleo/90 px-3 py-1.5 text-xs font-semibold text-branco shadow-md transition-transform group-hover:scale-105">
+      <Icone nome="zoom" class="size-4" /> Ampliar
+    </span>
+  </a>
+  {mostrarLegenda && <figcaption class="mt-2.5 text-sm leading-5 font-semibold text-petroleo">{legenda}</figcaption>}
+</figure>

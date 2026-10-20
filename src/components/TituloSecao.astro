@@ -1,0 +1,13 @@
+---
+interface Props { rotulo?: string; id?: string; class?: string; escuro?: boolean; centralizado?: boolean }
+const { rotulo, id, class: classe = '', escuro = false, centralizado = false } = Astro.props;
+---
+<header class:list={['mb-8 md:mb-12', centralizado && 'mx-auto max-w-3xl text-center', classe]}>
+  {rotulo && <p class:list={['rotulo mb-3', escuro ? 'text-turquesa' : 'text-turquesa-texto']}>{rotulo}</p>}
+  <h2 id={id} class:list={['h2', escuro && 'text-branco']}><slot /></h2>
+  {Astro.slots.has('intro') && (
+    <div class:list={['mt-4 text-cinza-escuro md:text-lg', escuro && 'text-branco/85', centralizado && 'mx-auto']}>
+      <slot name="intro" />
+    </div>
+  )}
+</header>

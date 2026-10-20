@@ -1,0 +1,19 @@
+---
+// 8.2 /obrigada — retorno do checkout. NÃO confirma compra, NÃO dispara Purchase, sem links de PDF.
+import Base from '@/layouts/Base.astro';
+import Icone from '@/components/Icone.astro';
+import { getSite, contatoSuporte } from '@/lib/conteudo';
+const suporte = contatoSuporte(await getSite());
+---
+<Base titulo="Confira seu e-mail | QUIMICAR ENEM" descricao="Orientações após o checkout dos materiais QUIMICAR." noindex cabecalho="enxuto">
+  <section class="secao">
+    <div class="container-lp max-w-2xl text-center">
+      <span class="mx-auto flex size-16 items-center justify-center rounded-full bg-turquesa/15 text-turquesa-texto"><Icone nome="email" class="size-8" /></span>
+      <h1 class="mt-6 text-[32px] leading-[38px] font-extrabold md:text-[44px] md:leading-[52px]">Confira seu e-mail</h1>
+      <p class="mt-4 text-lg">Confira seu e-mail para acompanhar o pagamento e as instruções de acesso. A liberação dos materiais depende da confirmação do pagamento.</p>
+      <p class="mt-4 text-[15px] text-cinza-medio">Não encontrou? Veja também as pastas Spam e Promoções.</p>
+      {suporte && <p class="mt-6">Precisa de ajuda? Fale com a gente: <a href={suporte.href} class="font-semibold text-turquesa-texto underline">{suporte.rotulo}</a></p>}
+      <a href="/" class="btn btn-secundario mt-8">Voltar ao início</a>
+    </div>
+  </section>
+</Base>

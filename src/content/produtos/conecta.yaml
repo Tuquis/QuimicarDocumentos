@@ -1,0 +1,41 @@
+# QUIMICAR CONECTA — campos "null" ficam ocultos no site (ver docs/PENDENCIAS.md).
+id: conecta
+ordem: 1
+nome: QUIMICAR CONECTA
+status: rascunho                  # rascunho | publicado | indisponivel
+subtitulo: 80 mapas visuais de Química com 80 questões comentadas visualmente.
+proposta: Entenda o conteúdo. Enxergue as conexões. Aprenda a aplicar.
+descricao_curta: 80 mapas visuais + 80 questões comentadas para compreender e revisar.
+descricao: >-
+  Os mapas organizam conceitos, relações, exemplos e aplicações em uma apresentação
+  ilustrada. Cada mapa acompanha uma questão didática autoral que demonstra como
+  utilizar os conhecimentos daquele tema. A resolução visual explicita o caminho até
+  a resposta e ajuda o estudante a relacionar teoria e aplicação.
+composicao:
+  - item: Mapas visuais
+    quantidade: 80
+  - item: Questões didáticas autorais comentadas visualmente
+    quantidade: 80
+indicacao: Construção da compreensão, estudo orientado e revisão de conteúdos.
+sequencia_de_uso:
+  - Estude o mapa visual do tema.
+  - Acompanhe a questão comentada correspondente.
+  - Volte ao mapa para revisar o que a questão cobrou.
+temas: []                         # P-04
+distribuicao_por_ano: null
+total_pdfs: null                  # P-05
+total_paginas: null               # P-05
+preco: null                       # P-02
+parcelamento: null                # P-02 — texto exato do checkout
+checkout_url: null                # P-01
+prazo_entrega: null               # P-07
+duracao_acesso: null              # P-07
+atualizacoes: null                # P-08
+capa: null
+imagens_card:
+  - amostras/conecta-acidos-e-bases/mapa.webp
+galeria: []
+selo: null
+cta_label: Quero o QUIMICAR CONECTA
+ancora_demonstracao: "#por-dentro-conecta"
+pagina_publicada: false

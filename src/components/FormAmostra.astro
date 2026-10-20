@@ -1,0 +1,211 @@
+---
+// Formulário de amostra grátis (seções 7.9 e 9.2). A entrega NUNCA depende
+// do opt-in de marketing. Funciona sem JS (POST + redirecionamento).
+import { Picture } from 'astro:assets';
+import Icone from './Icone.astro';
+import { getAmostra, getSite, imagem, linkLegal, contatoSuporte } from '@/lib/conteudo';
+
+interface Props { id?: string; titulo?: boolean }
+const { id = 'form-amostra' } = Astro.props;
+const site = await getSite();
+const conecta = await getAmostra('conecta-acidos-e-bases');
+const aplica = await getAmostra('aplica-q100-enem2025');
+const privacidade = await linkLegal('politica-de-privacidade');
+const suporte = contatoSuporte(site);
+const opcoes = [
+  { valor: 'conecta', titulo: 'CONECTA', descricao: conecta.entrega_descricao, imgs: ['amostras/conecta-acidos-e-bases/mapa.webp'] },
+  { valor: 'aplica', titulo: 'APLICA', descricao: aplica.entrega_descricao, imgs: ['amostras/aplica-q100-enem2025/raio-x-1.webp'] },
+  { valor: 'ambas', titulo: 'As duas', descricao: 'Os dois materiais acima: o par do CONECTA e o conjunto completo do APLICA.', imgs: ['amostras/conecta-acidos-e-bases/mapa.webp', 'amostras/aplica-q100-enem2025/raio-x-1.webp'], padrao: true },
+];
+---
+<form
+  id={id}
+  action="/api/amostra"
+  method="post"
+  novalidate
+  class="form-amostra rounded-[20px] bg-branco p-5 text-cinza-escuro shadow-cartao md:p-7"
+  data-suporte={suporte ? JSON.stringify(suporte) : ''}
+>
+  <div data-estado-form="padrao">
+    <fieldset>
+      <legend class="font-titulo text-lg font-extrabold text-petroleo">Qual material você quer receber?</legend>
+      <div class="mt-3 space-y-2.5">
+        {opcoes.map((o) => (
+          <label class="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-cinza-claro p-3 transition-colors hover:border-turquesa/60 has-[:checked]:border-petroleo has-[:checked]:bg-cinza-claro/50 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-turquesa">
+            <input type="radio" name="amostra" value={o.valor} checked={o.padrao} class="size-5 shrink-0 accent-petroleo" required />
+            <span class="flex shrink-0 -space-x-4" aria-hidden="true">
+              {o.imgs.map((src, i) => (
+                <Picture src={imagem(src)} alt="" formats={['avif', 'webp']} fallbackFormat="jpg" widths={[96]} sizes="44px" quality={60} loading="lazy" class:list={['h-auto w-11 rounded-sm shadow ring-1 ring-petroleo/10', i === 1 && 'rotate-6']} />
+              ))}
+            </span>
+            <span class="min-w-0">
+              <span class="block font-titulo font-bold text-petroleo">{o.titulo}</span>
+              <span class="block text-sm leading-5">{o.descricao}</span>
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+
+    <div class="mt-5 grid gap-4 sm:grid-cols-2">
+      <div>
+        <label for={`${id}-email`} class="block font-semibold text-petroleo">E-mail <span class="font-normal text-cinza-medio">(obrigatório)</span></label>
+        <input
+          id={`${id}-email`}
+          name="email"
+          type="email"
+          inputmode="email"
+          autocomplete="email"
+          required
+          maxlength="254"
+          aria-describedby={`${id}-email-erro`}
+          class="mt-1.5 block min-h-12 w-full rounded-xl border-2 border-cinza-claro bg-branco px-4 text-base text-petroleo placeholder:text-cinza-medio focus:border-petroleo focus:outline-none aria-[invalid=true]:border-vermelho"
+          placeholder="seuemail@exemplo.com"
+        />
+        <p id={`${id}-email-erro`} class="mt-1.5 hidden text-sm font-semibold text-[#b3261e]"></p>
+      </div>
+      <div>
+        <label for={`${id}-nome`} class="block font-semibold text-petroleo">Primeiro nome <span class="font-normal text-cinza-medio">(opcional)</span></label>
+        <input
+          id={`${id}-nome`}
+          name="nome"
+          type="text"
+          autocomplete="given-name"
+          maxlength="60"
+          class="mt-1.5 block min-h-12 w-full rounded-xl border-2 border-cinza-claro bg-branco px-4 text-base text-petroleo placeholder:text-cinza-medio focus:border-petroleo focus:outline-none"
+        />
+      </div>
+    </div>
+
+    <label class="mt-5 flex cursor-pointer items-start gap-3 text-[15px] leading-6">
+      <input type="checkbox" name="marketing_optin" value="sim" class="mt-1 size-5 shrink-0 accent-petroleo" />
+      <span>Quero receber novidades e ofertas da QUIMICAR por e-mail. <span class="text-cinza-medio">(opcional)</span></span>
+    </label>
+
+    <!-- Honeypot: invisível para pessoas; robôs costumam preencher. -->
+    <div aria-hidden="true" class="absolute -left-[9999px] h-px w-px overflow-hidden">
+      <label>Não preencha este campo <input type="text" name="site_url" tabindex="-1" autocomplete="off" /></label>
+    </div>
+    <input type="hidden" name="utm_source" value="" />
+    <input type="hidden" name="utm_campaign" value="" />
+
+    {site.turnstile_site_key && (
+      <div class="cf-turnstile mt-4" data-sitekey={site.turnstile_site_key} data-appearance="interaction-only" data-language="pt-br"></div>
+    )}
+
+    <button type="submit" class="btn btn-primario mt-5 w-full">
+      <span data-rotulo>Receber meu material gratuito</span>
+      <svg data-spinner class="hidden size-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity=".25"/><path d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    </button>
+    <p class="mt-3 text-sm leading-5 text-cinza-medio">
+      Ao enviar, você recebe o material solicitado por e-mail.
+      {privacidade && <>Veja a <a href={privacidade} class="font-semibold text-turquesa-texto underline">Política de Privacidade</a>.</>}
+    </p>
+    <div data-erro-geral role="alert" class="mt-4 hidden rounded-xl border border-vermelho/40 bg-[#fdf1f0] p-4 text-[15px] leading-6"></div>
+  </div>
+
+  <div data-estado-form="sucesso" hidden tabindex="-1" class="outline-none" aria-live="polite">
+    <p class="flex items-center gap-3 font-titulo text-2xl font-extrabold text-petroleo">
+      <span class="flex size-11 items-center justify-center rounded-full bg-verde text-branco"><Icone nome="check" class="size-6" /></span>
+      Pronto!
+    </p>
+    <p class="mt-3 text-[17px] leading-7">Enviamos o material para <strong data-email-mascarado class="text-petroleo"></strong>. Confira também as pastas Spam e Promoções.</p>
+    <ol class="mt-5 space-y-2 text-[15px] leading-6">
+      <li class="flex gap-2"><span class="font-titulo font-bold text-turquesa-texto">1.</span> Abra o e-mail e baixe o PDF.</li>
+      <li class="flex gap-2"><span class="font-titulo font-bold text-turquesa-texto">2.</span> No APLICA, comece pelo Raio-X e tente o Desafio antes de olhar a Resolução.</li>
+      <li class="flex gap-2"><span class="font-titulo font-bold text-turquesa-texto">3.</span> Gostou? Conheça as coleções completas.</li>
+    </ol>
+    <a href="/#colecoes" class="btn btn-primario mt-6 w-full">Conhecer as coleções</a>
+  </div>
+</form>
+
+<script>
+  import { EMAIL_RE, mascararEmail } from '@/lib/email';
+  import { utmsDaSessao } from '@/scripts/utm';
+  import { track } from '@/lib/track';
+
+  const msgFalha = (suporte: { rotulo: string; href: string } | null) =>
+    `Não conseguimos enviar agora. Tente de novo em alguns minutos${suporte ? ` ou fale com a gente em <a class="font-semibold underline" href="${suporte.href}">${suporte.rotulo}</a>` : ''}.`;
+
+  // Turnstile só é carregado quando há chave pública e um formulário na tela.
+  if (document.querySelector('.cf-turnstile') && !document.querySelector('script[src*="turnstile"]')) {
+    const s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    s.async = true;
+    s.defer = true;
+    document.head.appendChild(s);
+  }
+
+  // Botões "Receber o conjunto do APLICA" pré-selecionam a opção.
+  document.addEventListener('click', (e) => {
+    const opcao = (e.target as HTMLElement).closest<HTMLElement>('[data-escolher-amostra]')?.dataset.escolherAmostra;
+    if (!opcao) return;
+    document.querySelectorAll<HTMLInputElement>(`.form-amostra input[name="amostra"][value="${opcao}"]`).forEach((r) => (r.checked = true));
+  });
+
+  document.querySelectorAll<HTMLFormElement>('.form-amostra').forEach((form) => {
+    const padrao = form.querySelector<HTMLElement>('[data-estado-form="padrao"]')!;
+    const sucesso = form.querySelector<HTMLElement>('[data-estado-form="sucesso"]')!;
+    const email = form.querySelector<HTMLInputElement>('input[name="email"]')!;
+    const erroEmail = document.getElementById(email.getAttribute('aria-describedby')!)!;
+    const erroGeral = form.querySelector<HTMLElement>('[data-erro-geral]')!;
+    const botao = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const suporte = form.dataset.suporte ? JSON.parse(form.dataset.suporte) : null;
+    const utms = utmsDaSessao();
+    (form.elements.namedItem('utm_source') as HTMLInputElement).value = utms.utm_source ?? '';
+    (form.elements.namedItem('utm_campaign') as HTMLInputElement).value = utms.utm_campaign ?? '';
+
+    const erroCampo = (msg: string) => {
+      email.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      erroEmail.textContent = msg;
+      erroEmail.classList.toggle('hidden', !msg);
+    };
+    const carregando = (sim: boolean) => {
+      botao.disabled = sim;
+      form.setAttribute('aria-busy', String(sim));
+      botao.querySelector('[data-spinner]')!.classList.toggle('hidden', !sim);
+      botao.querySelector('[data-rotulo]')!.textContent = sim ? 'Enviando…' : 'Receber meu material gratuito';
+    };
+    email.addEventListener('input', () => email.getAttribute('aria-invalid') === 'true' && EMAIL_RE.test(email.value.trim()) && erroCampo(''));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      erroGeral.classList.add('hidden');
+      const valor = email.value.trim();
+      if (!valor) return erroCampo('Informe seu e-mail.'), email.focus();
+      if (!EMAIL_RE.test(valor)) return erroCampo('Confira o e-mail: parece que falta alguma parte (ex.: nome@gmail.com).'), email.focus();
+      erroCampo('');
+      carregando(true);
+      try {
+        const corpo = Object.fromEntries(new FormData(form).entries());
+        const r = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(corpo),
+        });
+        const dados = (await r.json().catch(() => ({}))) as { ok?: boolean; campo?: string; mensagem?: string };
+        if (!r.ok || !dados.ok) {
+          if (dados.campo === 'email') {
+            erroCampo(dados.mensagem || 'Confira o e-mail informado.');
+            email.focus();
+          } else {
+            erroGeral.innerHTML = dados.mensagem ? `${dados.mensagem}${suporte ? ` Se precisar, fale com a gente em <a class="font-semibold underline" href="${suporte.href}">${suporte.rotulo}</a>.` : ''}` : msgFalha(suporte);
+            erroGeral.classList.remove('hidden');
+          }
+          (window as any).turnstile?.reset?.();
+          return;
+        }
+        sucesso.querySelector('[data-email-mascarado]')!.textContent = mascararEmail(valor);
+        padrao.hidden = true;
+        sucesso.hidden = false;
+        sucesso.focus();
+        track('lead_amostra', { amostra: String(corpo.amostra ?? '') });
+      } catch {
+        erroGeral.innerHTML = msgFalha(suporte);
+        erroGeral.classList.remove('hidden');
+      } finally {
+        carregando(false);
+      }
+    });
+  });
+</script>

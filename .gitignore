@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.netlify/
+.env
+.env.*
+!.env.example
+.DS_Store
+# PDFs pagos nunca entram no repositório (CLAUDE.md, regra 7).
+pagos/
+*.pago.pdf

@@ -1,0 +1,8 @@
+# A frase sobre a duração do acesso é inserida automaticamente a partir de
+# "duracao_acesso" dos produtos (quando os três tiverem o mesmo valor).
+pergunta: Como recebo e por quanto tempo acesso?
+resposta: >-
+  Após a aprovação do pagamento, você recebe instruções de acesso à coleção comprada.
+  {{duracao_acesso}} O material gratuito solicitado é enviado por e-mail, independentemente de compra.
+ordem: 6
+exibir_na_lp: true

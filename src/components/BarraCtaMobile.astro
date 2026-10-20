@@ -1,0 +1,40 @@
+---
+// Barra fixa no rodapé da tela, só no celular. Aparece depois do hero e some
+// quando o formulário de amostra ou o rodapé estão visíveis (seção 7.0).
+---
+<div
+  id="barra-cta"
+  class="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-cinza-claro bg-branco/95 px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-6px_20px_-10px_rgb(11_35_66/0.35)] backdrop-blur-sm transition-transform duration-200 data-[visivel]:translate-y-0 md:hidden"
+  aria-hidden="true"
+  inert
+>
+  <div class="flex gap-2">
+    <a href="#amostra" class="btn btn-secundario min-h-11 flex-1 px-2 py-2 text-[13px] whitespace-nowrap">Receber amostra grátis</a>
+    <a href="#colecoes" class="btn btn-primario min-h-11 flex-1 px-2 py-2 text-[13px] whitespace-nowrap">Ver coleções</a>
+  </div>
+</div>
+
+<script>
+  const barra = document.getElementById('barra-cta')!;
+  const hero = document.getElementById('inicio');
+  const bloqueios = ['amostra', 'rodape'].map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+  let passouHero = false;
+  const visiveis = new Set<Element>();
+  const atualizar = () => {
+    const mostrar = passouHero && visiveis.size === 0;
+    barra.toggleAttribute('data-visivel', mostrar);
+    barra.toggleAttribute('inert', !mostrar);
+    barra.setAttribute('aria-hidden', String(!mostrar));
+  };
+  if (hero) {
+    new IntersectionObserver(([e]) => {
+      passouHero = !e.isIntersecting && e.boundingClientRect.top < 0;
+      atualizar();
+    }).observe(hero);
+  }
+  const io = new IntersectionObserver((entradas) => {
+    for (const e of entradas) e.isIntersecting ? visiveis.add(e.target) : visiveis.delete(e.target);
+    atualizar();
+  });
+  bloqueios.forEach((el) => io.observe(el));
+</script>

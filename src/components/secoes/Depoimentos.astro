@@ -1,0 +1,22 @@
+---
+// Prova social: só existe com depoimentos REAIS e autorizados (regra 2.1).
+import TituloSecao from '../TituloSecao.astro';
+import { getDepoimentos } from '@/lib/conteudo';
+const depoimentos = await getDepoimentos();
+---
+{depoimentos.length > 0 && (
+  <section id="depoimentos" aria-labelledby="titulo-depoimentos" class="secao bg-branco">
+    <div class="container-lp">
+      <TituloSecao id="titulo-depoimentos" rotulo="Quem já estudou" centralizado>O que dizem os estudantes</TituloSecao>
+      <ul class="grid gap-5 md:grid-cols-3">
+        {depoimentos.map((d) => (
+          <li class="cartao p-6">
+            <blockquote class="text-[16px] leading-7">“{d.texto}”</blockquote>
+            <p class="mt-4 font-titulo font-bold text-petroleo">{d.nome}</p>
+            {d.contexto && <p class="text-sm text-cinza-medio">{d.contexto}</p>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

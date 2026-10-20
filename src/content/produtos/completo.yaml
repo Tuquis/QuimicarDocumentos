@@ -1,0 +1,45 @@
+# QUIMICAR COMPLETO — CONECTA + APLICA integrais.
+id: completo
+ordem: 3
+nome: QUIMICAR COMPLETO
+status: rascunho
+subtitulo: As duas coleções em uma única compra.
+proposta: Duas coleções, uma jornada de aprendizagem.
+descricao_curta: CONECTA + APLICA em uma única compra.
+descricao: >-
+  Reúna as duas coleções para estudar Química, compreender 50 questões do ENEM de
+  2023, 2024 e 2025 e praticar em 50 desafios autorais.
+composicao:
+  - item: Mapas visuais
+    quantidade: 80
+  - item: Questões didáticas comentadas
+    quantidade: 80
+  - item: Raio-X da Questão
+    quantidade: 50
+  - item: A Ciência por Trás da Questão
+    quantidade: 50
+  - item: Desafios de Aplicação
+    quantidade: 50
+  - item: Resoluções Inteligentes
+    quantidade: 50
+indicacao: null
+sequencia_de_uso: []
+temas: []
+distribuicao_por_ano: null
+total_pdfs: null
+total_paginas: null
+preco: null
+parcelamento: null
+checkout_url: null
+prazo_entrega: null
+duracao_acesso: null
+atualizacoes: null
+capa: null
+imagens_card:
+  - amostras/aplica-q100-enem2025/raio-x-1.webp
+  - amostras/conecta-acidos-e-bases/mapa.webp
+galeria: []
+selo: As duas coleções
+cta_label: Quero o QUIMICAR COMPLETO
+ancora_demonstracao: "#completo"
+pagina_publicada: false

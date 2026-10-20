@@ -1,0 +1,18 @@
+---
+import { Image } from 'astro:assets';
+import reduzida from '@/assets/marca/logo-reduzida.png';
+import completa from '@/assets/marca/logo-completa.png';
+interface Props { variante?: 'reduzida' | 'completa'; class?: string; carregamento?: 'eager' | 'lazy' }
+const { variante = 'reduzida', class: classe = 'h-10 w-auto', carregamento = 'eager' } = Astro.props;
+const src = variante === 'reduzida' ? reduzida : completa;
+---
+<Image
+  src={src}
+  alt="QUIMICAR ENEM"
+  class={classe}
+  widths={variante === 'reduzida' ? [180, 360] : [320, 640]}
+  sizes={variante === 'reduzida' ? '180px' : '320px'}
+  format="webp"
+  loading={carregamento}
+  decoding="async"
+/>

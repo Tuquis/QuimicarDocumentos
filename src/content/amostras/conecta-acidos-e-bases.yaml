@@ -1,0 +1,18 @@
+# Par do CONECTA: mapa + questão comentada (Ácidos e Bases).
+# Rótulo da questão: ver P-12 (selo "QUESTÃO ENEM 2016" no PDF × questões autorais no briefing).
+colecao: conecta
+titulo: Ácidos e Bases
+identificacao: "CONECTA · Ácidos e Bases"
+entrega_descricao: "1 mapa visual + 1 questão comentada (Ácidos e Bases)"
+pdfs:
+  - arquivo: /amostras/conecta-acidos-e-bases-mapa.pdf
+    titulo: Mapa visual — Ácidos e Bases
+  - arquivo: /amostras/conecta-acidos-e-bases-questao-comentada.pdf
+    titulo: Questão comentada visualmente — Ácidos e Bases
+paginas:
+  - imagem: amostras/conecta-acidos-e-bases/mapa.webp
+    legenda: "Mapa visual · Ácidos e Bases"
+    alt: "Mapa visual Ácidos e Bases: conceito fundamental, escala de pH, ácidos e bases no cotidiano, saúde, meio ambiente, neutralização, indicadores ácido-base, tecnologia e como o ENEM cobra o tema."
+  - imagem: amostras/conecta-acidos-e-bases/questao.webp
+    legenda: "Questão comentada visualmente"
+    alt: "Questão comentada sobre Ácidos e Bases: enunciado com a escala de pH de limão, suco gástrico, água pura, sabão e água sanitária, explicação da química, resolução visual passo a passo, gabarito B e análise de cada alternativa."

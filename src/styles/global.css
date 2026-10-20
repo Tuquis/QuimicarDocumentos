@@ -1,0 +1,134 @@
+@import 'tailwindcss';
+
+/* Fontes auto-hospedadas (subset latin) — seção 4.1 do briefing */
+@import '@fontsource/montserrat/latin-600.css';
+@import '@fontsource/montserrat/latin-700.css';
+@import '@fontsource/montserrat/latin-800.css';
+@import '@fontsource/poppins/latin-400.css';
+@import '@fontsource/poppins/latin-400-italic.css';
+@import '@fontsource/poppins/latin-500.css';
+@import '@fontsource/poppins/latin-600.css';
+
+/* Tokens da identidade visual (manual v1.0) — seção 6.1 do briefing.
+   Laranja e turquesa puros NUNCA como texto sobre branco: use *-texto. */
+@theme {
+  --color-petroleo: #0b2342;
+  --color-turquesa: #00b8d9;
+  --color-turquesa-texto: #00788f;
+  --color-verde-agua: #18c7b5;
+  --color-laranja: #ff9000;
+  --color-laranja-texto: #b85c00;
+  --color-dourado: #ffb800;
+  --color-branco: #ffffff;
+  --color-cinza-claro: #e8edf2;
+  --color-cinza-escuro: #333333;
+  --color-cinza-medio: #687280;
+  --color-roxo: #7e57c2;
+  --color-vermelho: #e53935;
+  --color-verde: #43a047;
+  --color-verde-texto: #2e7d32;
+
+  --font-titulo: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 14px;
+  --shadow-cartao: 0 1px 2px rgb(11 35 66 / 0.06), 0 8px 24px -8px rgb(11 35 66 / 0.18);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-branco font-sans text-base leading-[1.625] text-cinza-escuro antialiased md:text-lg md:leading-[1.555];
+  }
+  h1, h2, h3, h4 {
+    @apply font-titulo text-petroleo;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+
+  /* Foco visível: turquesa sobre claro, dourado sobre escuro (seção 12.2) */
+  :focus-visible {
+    outline: 3px solid var(--color-turquesa);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .fundo-escuro :focus-visible { outline-color: var(--color-dourado); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-lp { @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8; }
+  .secao { @apply py-16 md:py-24; }
+
+  .rotulo {
+    @apply font-sans text-[13px] leading-[18px] font-semibold uppercase md:text-sm md:leading-5;
+    letter-spacing: 0.06em;
+  }
+  .h2 { @apply text-[28px] leading-[34px] font-extrabold md:text-[40px] md:leading-[48px]; }
+  .subtitulo { @apply font-titulo text-lg leading-[26px] font-bold md:text-[22px] md:leading-[30px]; }
+  .observacao { @apply text-sm leading-[22px] italic md:text-[15px] md:leading-6; }
+
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 text-center font-titulo text-base font-bold transition-[background-color,box-shadow,transform] duration-200 select-none;
+  }
+  .btn:active { transform: translateY(1px); }
+  /* Laranja + texto petróleo = 6,9:1 (nunca texto branco sobre laranja) */
+  .btn-primario { @apply bg-laranja text-petroleo shadow-[0_6px_18px_-6px_rgb(255_144_0/0.7)] hover:bg-[#ffa22e]; }
+  .btn-secundario { @apply border-2 border-petroleo bg-branco text-petroleo hover:bg-cinza-claro; }
+  .btn-contorno-claro { @apply border-2 border-branco/80 text-branco hover:bg-branco/10; }
+
+  .selo {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-sans text-xs leading-5 font-semibold tracking-wide;
+  }
+
+  .cartao { @apply rounded-[14px] bg-branco shadow-cartao; }
+
+  /* Entrada discreta ao rolar (150–250 ms) */
+  .revelar { opacity: 0; transform: translateY(12px); transition: opacity 0.25s ease, transform 0.25s ease; }
+  .revelar.visivel { opacity: 1; transform: none; }
+  .sem-js .revelar, html:not(.js) .revelar { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .revelar { opacity: 1; transform: none; } }
+
+  .sr-only-focusable:not(:focus) { @apply sr-only; }
+}
+
+@utility scrollbar-oculta {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* Legenda no lightbox (PhotoSwipe) */
+.pswp__legenda {
+  position: absolute;
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgb(11 35 66 / 0.85);
+  color: #fff;
+  font: 600 14px/20px 'Poppins', sans-serif;
+  text-align: center;
+  pointer-events: none;
+}
+.pswp__button:focus-visible { outline: 3px solid var(--color-dourado); outline-offset: -3px; }
+
+/* Páginas legais (Markdown) */
+.texto-legal { @apply space-y-4; }
+.texto-legal h2 { @apply mt-10 text-2xl font-extrabold; }
+.texto-legal h3 { @apply mt-6 text-xl font-bold; }
+.texto-legal ul { @apply list-disc space-y-1 pl-6; }
+.texto-legal ol { @apply list-decimal space-y-1 pl-6; }
+.texto-legal a { @apply font-semibold text-turquesa-texto underline; }

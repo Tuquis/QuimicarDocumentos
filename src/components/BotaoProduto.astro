@@ -1,0 +1,31 @@
+---
+// CTA de produto conforme o status (seção 4.2):
+// publicado e completo → compra; rascunho → amostra grátis; indisponível → aviso.
+import type { Produto } from '@/lib/conteudo';
+import { vendavel } from '@/lib/produtos';
+import Icone from './Icone.astro';
+
+interface Props { produto: Produto; class?: string; variante?: 'primario' | 'secundario' }
+const { produto, class: classe = '', variante = 'primario' } = Astro.props;
+const estado = produto.status === 'indisponivel' ? 'indisponivel' : vendavel(produto) ? 'compra' : 'amostra';
+---
+{estado === 'compra' && (
+  <a
+    href={produto.checkout_url!}
+    class:list={['btn btn-primario', classe]}
+    data-checkout={produto.id}
+    data-valor={produto.preco}
+  >
+    {produto.cta_label}
+  </a>
+)}
+{estado === 'amostra' && (
+  <a href="#amostra" class:list={['btn', variante === 'primario' ? 'btn-primario' : 'btn-secundario', classe]}>
+    Receber amostra grátis <Icone nome="seta" class="size-5" />
+  </a>
+)}
+{estado === 'indisponivel' && (
+  <p class:list={['inline-flex min-h-12 items-center justify-center rounded-full bg-cinza-claro px-6 font-titulo font-bold text-cinza-escuro', classe]}>
+    Indisponível no momento
+  </p>
+)}

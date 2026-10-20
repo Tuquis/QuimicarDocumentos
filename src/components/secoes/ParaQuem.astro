@@ -1,0 +1,55 @@
+---
+// 7.7 Para quem é. Bloco de professores segue a licença pessoal até a definição da P-14.
+import TituloSecao from '../TituloSecao.astro';
+import Icone from '../Icone.astro';
+
+const estudantes = [
+  'Quem vai fazer o ENEM e tem dificuldade em Química.',
+  'Quem estuda, mas não consegue transformar teoria em resposta.',
+  'Quem quer revisar com material visual e organizado.',
+];
+const naoE = ['Quem procura videoaulas ou aulas ao vivo.', 'Quem procura correção individual.'];
+---
+<section id="para-quem" aria-labelledby="titulo-para-quem" class="secao bg-cinza-claro/50">
+  <div class="container-lp">
+    <TituloSecao id="titulo-para-quem" rotulo="Para quem é">Feito para quem quer entender, não só decorar</TituloSecao>
+
+    <div class="grid gap-5 md:grid-cols-[1.4fr_1fr] md:gap-6">
+      <div class="revelar cartao p-6 md:row-span-2 md:p-8">
+        <p class="flex items-center gap-3 font-titulo text-xl font-extrabold text-petroleo">
+          <span class="flex size-11 items-center justify-center rounded-full bg-turquesa text-petroleo"><Icone nome="capelo" class="size-6" /></span>
+          Para estudantes
+        </p>
+        <ul class="mt-6 space-y-4">
+          {estudantes.map((t) => (
+            <li class="flex items-start gap-3 text-[17px] leading-7">
+              <Icone nome="check-circulo" class="mt-0.5 size-6 text-[#0b6b61]" />
+              {t}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="revelar cartao p-6">
+        <p class="flex items-center gap-3 font-titulo text-lg font-extrabold text-petroleo">
+          <span class="flex size-10 items-center justify-center rounded-full bg-cinza-claro text-petroleo"><Icone nome="pessoa" class="size-5" /></span>
+          Para professores
+        </p>
+        <p class="mt-3 text-[15px] leading-6">Para professores que querem estudar a abordagem e se inspirar.</p>
+        <p class="mt-2 text-sm text-cinza-medio">A licença é de uso pessoal: os arquivos não podem ser redistribuídos.</p>
+      </div>
+
+      <div class="revelar rounded-[14px] border-2 border-dashed border-cinza-medio/40 p-6">
+        <p class="font-titulo text-lg font-extrabold text-petroleo">Não é para</p>
+        <ul class="mt-3 space-y-2">
+          {naoE.map((t) => (
+            <li class="flex items-start gap-2.5 text-[15px] leading-6">
+              <Icone nome="x" class="mt-0.5 size-5 text-cinza-medio" />
+              {t}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

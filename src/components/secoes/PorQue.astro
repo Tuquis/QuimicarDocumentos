@@ -1,0 +1,48 @@
+---
+// 7.2 Identificação
+import TituloSecao from '../TituloSecao.astro';
+import Icone from '../Icone.astro';
+
+const dores = [
+  { icone: 'livro', texto: 'Você estuda, mas trava quando a questão aparece.' },
+  { icone: 'ajuda', texto: 'Lê o enunciado e não sabe por onde começar.' },
+  { icone: 'alerta', texto: 'Erra e não sabe o que revisar.' },
+] as const;
+const capacidades = [
+  { titulo: 'Entendi a questão:', texto: 'consigo identificar o que o problema exige.' },
+  { titulo: 'Sei justificar minha resposta:', texto: 'compreendo os conceitos e as evidências que sustentam minha escolha.' },
+  { titulo: 'Sei o que estudar para melhorar:', texto: 'reconheço minhas dificuldades e tenho um caminho para avançar.' },
+];
+---
+<section id="por-que" aria-labelledby="titulo-por-que" class="secao bg-branco">
+  <div class="container-lp">
+    <TituloSecao id="titulo-por-que" rotulo="Por que QUIMICAR" class="max-w-3xl">
+      Você não precisa só de mais conteúdo. Precisa saber o que fazer com ele na hora da prova.
+    </TituloSecao>
+
+    <ul class="grid gap-4 md:grid-cols-3 md:gap-6">
+      {dores.map((d) => (
+        <li class="revelar flex items-start gap-4 rounded-[14px] border border-cinza-claro bg-cinza-claro/40 p-5 md:flex-col md:p-6">
+          <span class="flex size-11 items-center justify-center rounded-full bg-branco text-petroleo shadow-sm"><Icone nome={d.icone} class="size-5" /></span>
+          <p class="font-titulo text-lg leading-7 font-bold text-petroleo">{d.texto}</p>
+        </li>
+      ))}
+    </ul>
+
+    <div class="mt-12 grid items-center gap-8 md:mt-16 md:grid-cols-[1fr_1.1fr] md:gap-12">
+      <p class="subtitulo text-petroleo">
+        O QUIMICAR transforma o estudo de Química para o ENEM em uma experiência
+        <span class="text-turquesa-texto">visual</span>, <span class="text-turquesa-texto">organizada</span>,
+        <span class="text-laranja-texto">conectada</span> e <span class="text-laranja-texto">prática</span>.
+      </p>
+      <ul class="space-y-4">
+        {capacidades.map((c) => (
+          <li class="revelar flex items-start gap-3">
+            <span class="mt-0.5 flex size-7 items-center justify-center rounded-full bg-verde-agua/20 text-[#0b6b61]"><Icone nome="check" class="size-4" /></span>
+            <p><strong class="font-titulo font-bold text-petroleo">{c.titulo}</strong> {c.texto}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

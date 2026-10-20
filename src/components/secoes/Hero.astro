@@ -1,0 +1,66 @@
+---
+// 7.1 Hero — imagem de páginas reais é o LCP (fetchpriority alta, sem lazy).
+import { getImage } from 'astro:assets';
+import FaixaMetodo from '../FaixaMetodo.astro';
+import Icone from '../Icone.astro';
+import hero45 from '@/assets/amostras/hero-4x5.webp';
+import hero1610 from '@/assets/amostras/hero-16x10.webp';
+
+const fontes = async (src: ImageMetadata, larguras: number[], format: 'avif' | 'webp') =>
+  (await Promise.all(larguras.map(async (w) => `${(await getImage({ src, width: w, format, quality: 72 })).src} ${w}w`))).join(', ');
+
+const mob = { avif: await fontes(hero45, [420, 780], 'avif'), webp: await fontes(hero45, [420, 780], 'webp') };
+const desk = { avif: await fontes(hero1610, [760, 1200], 'avif'), webp: await fontes(hero1610, [760, 1200], 'webp') };
+const fallback = await getImage({ src: hero1610, width: 1200, format: 'jpg', quality: 72, background: '#ffffff' });
+---
+<section id="inicio" aria-labelledby="titulo-hero" class="relative overflow-hidden">
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60rem_30rem_at_85%_10%,rgb(0_184_217/0.10),transparent_60%),radial-gradient(40rem_24rem_at_0%_100%,rgb(255_144_0/0.08),transparent_60%)]"></div>
+
+  <div class="container-lp grid items-center gap-6 pt-6 pb-8 md:grid-cols-[1fr_1fr] md:gap-8 md:pt-12 md:pb-12 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
+    <div>
+      <p class="rotulo inline-flex items-center gap-2 rounded-full bg-cinza-claro px-3 py-1 text-petroleo">
+        <Icone nome="frasco" class="size-4 text-turquesa-texto" />
+        Química para o ENEM · Materiais em PDF
+      </p>
+      <h1 id="titulo-hero" class="mt-4 text-[32px] leading-[38px] font-extrabold md:text-[40px] md:leading-[48px] xl:text-[52px] xl:leading-[60px]">
+        Química para o ENEM que você consegue
+        <span class="text-turquesa-texto">visualizar</span>, <span class="text-turquesa-texto">entender</span> e
+        <span class="relative whitespace-nowrap text-laranja-texto">aplicar<svg aria-hidden="true" viewBox="0 0 200 12" preserveAspectRatio="none" class="absolute -bottom-1.5 left-0 h-2.5 w-full text-laranja"><path d="M2 9C50 3 120 2 198 6" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/></svg></span>.
+      </h1>
+      <p class="mt-4 text-[17px] leading-[26px] text-cinza-escuro md:mt-5 md:text-xl md:leading-8">
+        Estude com mapas e questões comentadas visualmente. Explore questões reais do ENEM e pratique em desafios autorais com correção explicada.
+      </p>
+      <div class="mt-6 flex flex-col gap-3 sm:flex-row md:mt-8">
+        <a href="#colecoes" class="btn btn-primario">Conhecer as coleções <Icone nome="seta" class="size-5" /></a>
+        <a href="#amostra" class="btn btn-secundario">Ver amostras gratuitas</a>
+      </div>
+      <p class="mt-4 flex items-center gap-2 text-sm text-cinza-medio">
+        <Icone nome="arquivo" class="size-4 text-petroleo" />
+        Materiais digitais em PDF para leitura e impressão pessoal.
+      </p>
+    </div>
+
+    <div class="relative -mx-2 md:-mr-6 md:ml-0 lg:-mr-10">
+      <picture>
+        <source media="(min-width: 768px)" type="image/avif" srcset={desk.avif} sizes="(min-width: 1152px) 600px, 52vw" />
+        <source media="(min-width: 768px)" type="image/webp" srcset={desk.webp} sizes="(min-width: 1152px) 600px, 52vw" />
+        <source type="image/avif" srcset={mob.avif} sizes="100vw" />
+        <source type="image/webp" srcset={mob.webp} sizes="100vw" />
+        <img
+          src={fallback.src}
+          width="1200"
+          height="1500"
+          alt="Páginas reais dos materiais QUIMICAR: o mapa visual Ácidos e Bases do CONECTA em primeiro plano e o Raio-X da Questão 100 do ENEM 2025, do APLICA, ao fundo."
+          fetchpriority="high"
+          loading="eager"
+          decoding="async"
+          class="mx-auto aspect-[4/5] h-auto w-full max-w-md object-contain md:aspect-[16/10] md:max-w-none"
+        />
+      </picture>
+    </div>
+  </div>
+
+  <div class="border-y border-cinza-claro bg-branco/70 py-4">
+    <div class="container-lp"><FaixaMetodo /></div>
+  </div>
+</section>

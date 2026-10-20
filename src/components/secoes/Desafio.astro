@@ -1,0 +1,139 @@
+---
+// 7.6 Desafio interativo — conteúdo em src/content/amostras/aplica-q100-enem2025.yaml.
+// Sem JS: a resolução fica disponível em <details>.
+import TituloSecao from '../TituloSecao.astro';
+import Selo from '../Selo.astro';
+import Icone from '../Icone.astro';
+import { getAmostra } from '@/lib/conteudo';
+
+interface Props { idSecao?: string }
+const { idSecao = 'desafio' } = Astro.props;
+const { desafio: d } = await getAmostra('aplica-q100-enem2025');
+if (!d) throw new Error('desafio ausente em aplica-q100-enem2025.yaml');
+const coresEtapa = ['bg-petroleo text-branco', 'bg-turquesa text-petroleo', 'bg-laranja text-petroleo', 'bg-turquesa text-petroleo', 'bg-laranja text-petroleo'];
+const dados = { gabarito: d.gabarito, correta: d.feedback_correta, alternativas: d.alternativas };
+---
+<section id={idSecao} aria-labelledby={`titulo-${idSecao}`} class="secao bg-branco">
+  <div class="container-lp max-w-4xl">
+    <TituloSecao id={`titulo-${idSecao}`} rotulo="Experimente o método" centralizado>
+      Agora é com você
+      <p slot="intro">Tente resolver antes de ver a resposta. Depois, compare o seu caminho com a Resolução Inteligente.</p>
+    </TituloSecao>
+
+    <div class="rounded-[20px] border border-cinza-claro bg-branco p-5 shadow-cartao md:p-8" data-desafio>
+      <Selo tipo="autoral">{d.selo}</Selo>
+      <h3 class="mt-4 font-titulo text-xl font-extrabold text-petroleo md:text-2xl">Desafio de Aplicação</h3>
+      {d.enunciado.map((par) => <p class="mt-3">{par}</p>)}
+      <p class="my-5 rounded-xl border border-turquesa/40 bg-[#f1fafc] px-3 py-3 text-center font-titulo text-[15px] leading-7 font-bold text-petroleo sm:text-[17px] md:text-xl" set:html={d.equacao} />
+
+      <form class="mt-2" id="desafio-form" novalidate>
+        <fieldset>
+          <legend class="font-titulo text-lg leading-7 font-bold text-petroleo">{d.pergunta}</legend>
+          <div class="mt-4 space-y-2.5">
+            {d.alternativas.map((a) => (
+              <label class="group flex min-h-12 cursor-pointer items-start gap-3 rounded-xl border-2 border-cinza-claro p-3 transition-colors hover:border-turquesa/60 has-[:checked]:border-petroleo has-[:checked]:bg-cinza-claro/50 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-turquesa data-[estado=certa]:border-verde data-[estado=certa]:bg-[#edf7ee] data-[estado=errada]:border-cinza-medio" data-alternativa={a.letra}>
+                <input type="radio" name="resposta" value={a.letra} class="sr-only" required />
+                <span class="flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-petroleo/30 font-titulo font-bold text-petroleo group-has-[:checked]:border-petroleo group-has-[:checked]:bg-petroleo group-has-[:checked]:text-branco">{a.letra}</span>
+                <span class="pt-1">{a.texto}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <p id="desafio-erro" class="mt-3 hidden text-sm font-semibold text-[#b3261e]" role="alert">Escolha uma alternativa para conferir.</p>
+        <button type="submit" class="btn btn-primario mt-5 hidden w-full sm:w-auto [.js_&]:inline-flex">Conferir resposta</button>
+      </form>
+
+      <div id="desafio-feedback" aria-live="polite" tabindex="-1" class="outline-none"></div>
+
+      <details id="desafio-resolucao" class="group mt-6 rounded-xl border border-cinza-claro [.js_&]:hidden">
+        <summary class="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-4 py-3 font-titulo font-bold text-petroleo hover:bg-cinza-claro/50 [&::-webkit-details-marker]:hidden">
+          Ver a resolução completa
+          <Icone nome="seta-baixo" class="size-5 transition-transform group-open:rotate-180" />
+        </summary>
+        <div class="px-4 pb-5">
+          <p class="rounded-lg bg-[#edf7ee] p-3 font-titulo font-bold text-verde-texto">Resposta correta: {d.gabarito}. {d.feedback_correta.replace(/^Isso! /, '')}</p>
+          <p class="mt-4 rotulo text-petroleo">Resolução Inteligente · as cinco etapas</p>
+          <ol class="mt-3 space-y-3">
+            {d.resolucao.map((r, i) => (
+              <li class="flex gap-3">
+                <span class:list={['flex size-8 shrink-0 items-center justify-center rounded-lg font-titulo font-extrabold', coresEtapa[i]]}>{i + 1}</span>
+                <p><strong class="font-titulo text-petroleo">{r.etapa}</strong> · {r.texto}</p>
+              </li>
+            ))}
+          </ol>
+          <aside class="mt-5 rounded-xl border border-laranja/50 bg-[#fff6eb] p-4">
+            <p class="font-titulo text-sm font-extrabold tracking-wide text-laranja-texto uppercase">{d.nao_confunda.titulo}</p>
+            <p class="mt-1 text-[15px] leading-6">{d.nao_confunda.texto}</p>
+          </aside>
+          <p class="mt-4 observacao text-cinza-medio">A Resolução Inteligente é uma correção previamente elaborada, para você comparar o seu raciocínio.</p>
+        </div>
+      </details>
+
+      <div id="desafio-cta" class="mt-8 rounded-xl bg-petroleo p-5 text-center text-branco fundo-escuro md:p-6 [.js_&]:hidden">
+        <p class="font-titulo text-lg font-bold md:text-xl">Quer 50 desafios como este, com Resolução Inteligente?</p>
+        <div class="mt-4 flex flex-col justify-center gap-3 sm:flex-row">
+          <a href="/#colecoes" class="btn btn-primario">Conhecer o APLICA</a>
+          <a href="#amostra" data-escolher-amostra="aplica" class="btn btn-contorno-claro">Receber o conjunto completo grátis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="application/json" id="desafio-dados" set:html={JSON.stringify(dados)} />
+</section>
+
+<script>
+  import { track } from '@/lib/track';
+  type Alt = { letra: string; texto: string; feedback: string; hipotese: string | null };
+  const dados = JSON.parse(document.getElementById('desafio-dados')!.textContent!) as { gabarito: string; correta: string; alternativas: Alt[] };
+  const form = document.getElementById('desafio-form') as HTMLFormElement;
+  const erro = document.getElementById('desafio-erro')!;
+  const feedback = document.getElementById('desafio-feedback')!;
+  const resolucao = document.getElementById('desafio-resolucao') as HTMLDetailsElement;
+  const cta = document.getElementById('desafio-cta')!;
+  let rastreado = false;
+
+  const el = (tag: string, classe: string, texto?: string) => {
+    const e = document.createElement(tag);
+    e.className = classe;
+    if (texto) e.textContent = texto;
+    return e;
+  };
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const letra = (new FormData(form).get('resposta') as string | null) ?? '';
+    if (!letra) {
+      erro.classList.remove('hidden');
+      form.querySelector<HTMLInputElement>('input[name="resposta"]')?.focus();
+      return;
+    }
+    erro.classList.add('hidden');
+    const correta = letra === dados.gabarito;
+    const alt = dados.alternativas.find((a) => a.letra === letra)!;
+
+    form.querySelectorAll<HTMLElement>('[data-alternativa]').forEach((l) => {
+      const est = l.dataset.alternativa === dados.gabarito && correta ? 'certa' : l.dataset.alternativa === letra ? 'errada' : '';
+      if (est) l.dataset.estado = est;
+      else delete l.dataset.estado;
+    });
+
+    feedback.replaceChildren();
+    const caixa = el('div', correta ? 'mt-6 rounded-xl border-2 border-verde bg-[#edf7ee] p-4' : 'mt-6 rounded-xl border-2 border-cinza-medio/40 bg-cinza-claro/50 p-4');
+    caixa.append(el('p', `font-titulo text-lg font-extrabold ${correta ? 'text-verde-texto' : 'text-petroleo'}`, correta ? dados.correta : `Você marcou ${letra}. Vamos rever o caminho.`));
+    if (!correta) {
+      caixa.append(el('p', 'mt-2', alt.feedback));
+      if (alt.hipotese) caixa.append(el('p', 'mt-2 observacao text-cinza-escuro', `${alt.hipotese} É uma hipótese, não um diagnóstico.`));
+    }
+    feedback.append(caixa);
+
+    resolucao.classList.remove('[.js_&]:hidden');
+    resolucao.open = correta;
+    cta.classList.remove('[.js_&]:hidden');
+    feedback.focus();
+
+    if (!rastreado) {
+      rastreado = true;
+      track('desafio_respondido', { correta, alternativa: letra });
+    }
+  });
+</script>

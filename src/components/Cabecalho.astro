@@ -1,0 +1,104 @@
+---
+import Logo from './Logo.astro';
+import Icone from './Icone.astro';
+
+interface Props { variante?: 'completo' | 'enxuto' }
+const { variante = 'completo' } = Astro.props;
+const naHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
+const base = naHome ? '' : '/';
+const links = [
+  { href: `${base}#colecoes`, rotulo: 'Coleções' },
+  { href: `${base}#metodo`, rotulo: 'Como funciona' },
+  { href: `${base}#amostra`, rotulo: 'Amostras' },
+  { href: `${base}#duvidas`, rotulo: 'Dúvidas' },
+];
+---
+<header
+  id="cabecalho"
+  class="group fixed inset-x-0 top-0 z-50 border-b border-transparent bg-branco/95 backdrop-blur-sm transition-[box-shadow,border-color] duration-200 data-[compacto]:border-cinza-claro data-[compacto]:shadow-[0_4px_16px_-8px_rgb(11_35_66/0.25)]"
+>
+  <div class="container-lp flex h-16 items-center justify-between gap-4 transition-[height] duration-200 md:h-[76px] group-data-[compacto]:h-14">
+    <a href={naHome ? '#inicio' : '/'} class="-ml-1 flex min-h-11 items-center rounded-lg px-1" aria-label="QUIMICAR ENEM, voltar ao início">
+      <Logo class="h-9 w-auto md:h-11" />
+    </a>
+
+    {variante === 'completo' ? (
+      <>
+        <nav aria-label="Principal" class="hidden md:block">
+          <ul class="flex items-center gap-1 lg:gap-2">
+            {links.map((l) => (
+              <li>
+                <a href={l.href} class="rounded-full px-3 py-2.5 font-titulo text-[15px] font-semibold text-petroleo hover:bg-cinza-claro">
+                  {l.rotulo}
+                </a>
+              </li>
+            ))}
+            <li class="ml-2">
+              <a href={`${base}#colecoes`} class="btn btn-primario min-h-11 px-5 py-2 text-[15px]">Ver coleções</a>
+            </li>
+          </ul>
+        </nav>
+
+        <button
+          type="button"
+          id="menu-botao"
+          class="flex size-11 items-center justify-center rounded-full text-petroleo hover:bg-cinza-claro md:hidden"
+          aria-expanded="false"
+          aria-controls="menu-movel"
+        >
+          <span class="sr-only">Abrir menu</span>
+          <Icone nome="menu" class="size-6" />
+        </button>
+      </>
+    ) : (
+      <a href="/#colecoes" class="btn btn-primario min-h-11 px-5 py-2 text-[15px]">Ver coleções</a>
+    )}
+  </div>
+
+  {variante === 'completo' && (
+    <div id="menu-movel" class="md:hidden" hidden>
+      <nav aria-label="Menu" class="container-lp border-t border-cinza-claro pt-2 pb-6">
+        <ul class="flex flex-col">
+          {links.map((l) => (
+            <li>
+              <a href={l.href} class="flex min-h-12 items-center border-b border-cinza-claro font-titulo text-lg font-semibold text-petroleo">
+                {l.rotulo}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a href={`${base}#colecoes`} class="btn btn-primario mt-5 w-full">Ver coleções</a>
+        <a href={`${base}#amostra`} class="btn btn-secundario mt-3 w-full">Receber amostra grátis</a>
+      </nav>
+    </div>
+  )}
+</header>
+<div aria-hidden="true" class="h-16 md:h-[76px]"></div>
+
+<script>
+  const cab = document.getElementById('cabecalho')!;
+  const onScroll = () => cab.toggleAttribute('data-compacto', scrollY > 24);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const botao = document.getElementById('menu-botao');
+  const painel = document.getElementById('menu-movel');
+  if (botao && painel) {
+    const rotulo = botao.querySelector('.sr-only')!;
+    const definir = (aberto: boolean, devolverFoco = false) => {
+      painel.hidden = !aberto;
+      botao.setAttribute('aria-expanded', String(aberto));
+      rotulo.textContent = aberto ? 'Fechar menu' : 'Abrir menu';
+      if (aberto) painel.querySelector<HTMLElement>('a')?.focus();
+      else if (devolverFoco) botao.focus();
+    };
+    botao.addEventListener('click', () => definir(painel.hidden));
+    painel.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) definir(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !painel.hidden) definir(false, true);
+    });
+    matchMedia('(min-width: 768px)').addEventListener('change', (m) => m.matches && definir(false));
+  }
+</script>

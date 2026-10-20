@@ -1,0 +1,46 @@
+---
+// 7.11 Condições — itens sem dado ficam ocultos.
+import TituloSecao from '../TituloSecao.astro';
+import Icone from '../Icone.astro';
+import { getProdutos, getSite, contatoSuporte, linkLegal, fraseDuracaoAcesso } from '@/lib/conteudo';
+
+const { lista } = await getProdutos();
+const site = await getSite();
+const suporte = contatoSuporte(site);
+const reembolso = await linkLegal('politica-de-reembolso');
+const comum = (campo: 'atualizacoes' | 'prazo_entrega') => {
+  const v = new Set(lista.map((p) => p[campo]));
+  const [u] = [...v];
+  return v.size === 1 && u ? u : null;
+};
+const duracao = fraseDuracaoAcesso(lista);
+const prazo = comum('prazo_entrega');
+const atualizacoes = comum('atualizacoes');
+
+const itens = [
+  { icone: 'arquivo', titulo: 'Formato', texto: 'Materiais digitais em PDF. Não há envio de produto impresso.' },
+  { icone: 'cartao', titulo: 'Como você recebe', texto: `Após a aprovação do pagamento, você recebe as instruções de acesso pela plataforma de checkout.${prazo ? ` Prazo: ${prazo}.` : ''}` },
+  duracao && { icone: 'relogio', titulo: 'Por quanto tempo acessa', texto: duracao },
+  { icone: 'impressora', titulo: 'Impressão', texto: 'Impressão permitida para uso pessoal, por conta do comprador. Não é permitida a redistribuição ou revenda.' },
+  atualizacoes && { icone: 'atualizar', titulo: 'Atualizações', texto: atualizacoes },
+  (suporte || reembolso) && { icone: 'mensagem', titulo: 'Suporte e reembolso', texto: '', suporte, reembolso },
+].filter(Boolean) as { icone: 'arquivo' | 'cartao' | 'relogio' | 'impressora' | 'atualizar' | 'mensagem'; titulo: string; texto: string; suporte?: typeof suporte; reembolso?: string | null }[];
+---
+<section id="condicoes" aria-labelledby="titulo-condicoes" class="secao bg-cinza-claro/50">
+  <div class="container-lp">
+    <TituloSecao id="titulo-condicoes" rotulo="Condições">Como funciona a compra e o acesso</TituloSecao>
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {itens.map((i) => (
+        <li class="revelar cartao flex gap-4 p-5">
+          <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-petroleo text-turquesa"><Icone nome={i.icone} class="size-5" /></span>
+          <div>
+            <h3 class="font-titulo text-base font-extrabold">{i.titulo}</h3>
+            {i.texto && <p class="mt-1 text-[15px] leading-6">{i.texto}</p>}
+            {i.suporte && <p class="mt-1 text-[15px] leading-6">Fale com a gente: <a href={i.suporte.href} class="font-semibold text-turquesa-texto underline">{i.suporte.rotulo}</a></p>}
+            {i.reembolso && <p class="mt-1 text-[15px] leading-6"><a href={i.reembolso} class="font-semibold text-turquesa-texto underline">Política de reembolso</a></p>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

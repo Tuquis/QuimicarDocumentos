@@ -1,0 +1,28 @@
+---
+// 8.3 /amostra-enviada — fallback do formulário sem JS (o JS mostra o mesmo estado na própria página).
+import Base from '@/layouts/Base.astro';
+import Icone from '@/components/Icone.astro';
+import { getSite, contatoSuporte } from '@/lib/conteudo';
+const suporte = contatoSuporte(await getSite());
+---
+<Base titulo="Material enviado | QUIMICAR ENEM" descricao="Seu material gratuito QUIMICAR foi enviado por e-mail." noindex cabecalho="enxuto">
+  <section class="secao">
+    <div class="container-lp max-w-2xl text-center">
+      <span class="mx-auto flex size-16 items-center justify-center rounded-full bg-verde text-branco"><Icone nome="check" class="size-8" /></span>
+      <h1 class="mt-6 text-[32px] leading-[38px] font-extrabold md:text-[44px] md:leading-[52px]">Pronto!</h1>
+      <p class="mt-4 text-lg">Enviamos o material para <strong id="email-mascarado" class="text-petroleo">o e-mail informado</strong>. Confira também as pastas Spam e Promoções.</p>
+      <ol class="mx-auto mt-8 max-w-md space-y-2 text-left">
+        <li><strong class="text-turquesa-texto">1.</strong> Abra o e-mail e baixe o PDF.</li>
+        <li><strong class="text-turquesa-texto">2.</strong> No APLICA, comece pelo Raio-X e tente o Desafio antes de olhar a Resolução.</li>
+        <li><strong class="text-turquesa-texto">3.</strong> Gostou? Conheça as coleções completas.</li>
+      </ol>
+      <a href="/#colecoes" class="btn btn-primario mt-8">Conhecer as coleções</a>
+      {suporte && <p class="mt-6 text-[15px]">Não chegou em alguns minutos? Fale com a gente: <a href={suporte.href} class="font-semibold text-turquesa-texto underline">{suporte.rotulo}</a></p>}
+    </div>
+  </section>
+</Base>
+<script>
+  // O endpoint só envia o e-mail já mascarado (ex.: jo***@gmail.com).
+  const para = new URLSearchParams(location.search).get('para');
+  if (para && /^[^@\s]{1,2}\*\*\*@[^\s]+$/.test(para)) document.getElementById('email-mascarado')!.textContent = para;
+</script>

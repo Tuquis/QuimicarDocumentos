@@ -1,0 +1,23 @@
+---
+// 8.4 Páginas legais: só são geradas quando "rascunho: false".
+import Base from '@/layouts/Base.astro';
+import { render } from 'astro:content';
+import { getPaginasLegaisPublicadas } from '@/lib/conteudo';
+
+export async function getStaticPaths() {
+  const paginas = await getPaginasLegaisPublicadas();
+  return paginas.map((p) => ({ params: { legal: p.id }, props: { pagina: p } }));
+}
+const { pagina } = Astro.props;
+const { Content } = await render(pagina);
+const data = pagina.data.atualizado_em?.toLocaleDateString('pt-BR', { timeZone: 'UTC', day: '2-digit', month: 'long', year: 'numeric' });
+---
+<Base titulo={`${pagina.data.titulo} | QUIMICAR ENEM`} descricao={`${pagina.data.titulo} da QUIMICAR ENEM.`}>
+  <article class="secao">
+    <div class="container-lp max-w-3xl">
+      <h1 class="text-[32px] leading-[38px] font-extrabold md:text-[44px] md:leading-[52px]">{pagina.data.titulo}</h1>
+      {data && <p class="mt-2 text-sm text-cinza-medio">Atualizado em {data}</p>}
+      <div class="texto-legal mt-8"><Content /></div>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,112 @@
+---
+import '@/styles/global.css';
+import Cabecalho from '@/components/Cabecalho.astro';
+import Rodape from '@/components/Rodape.astro';
+import BannerCookies from '@/components/BannerCookies.astro';
+import { getSite } from '@/lib/conteudo';
+import logoCompleta from '@/assets/marca/logo-completa.png';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  noindex?: boolean;
+  jsonLd?: object[];
+  cabecalho?: 'completo' | 'enxuto';
+  /** Link "Pular para o conteúdo" aponta para este id. */
+  idConteudo?: string;
+}
+
+const { titulo, descricao, noindex = false, jsonLd = [], cabecalho = 'completo', idConteudo = 'conteudo' } = Astro.props;
+const site = await getSite();
+const canonica = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site).href;
+const og = new URL('/og-image.jpg', Astro.site).href;
+const logoOrg = await getImage({ src: logoCompleta, width: 600, format: 'png' });
+
+const organizacao = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.nome,
+  url: new URL('/', Astro.site).href,
+  logo: new URL(logoOrg.src, Astro.site).href,
+  ...(site.contato.email_suporte ? { email: site.contato.email_suporte } : {}),
+  ...(site.fornecedor.razao_social ? { legalName: site.fornecedor.razao_social } : {}),
+};
+
+// Configuração pública da camada de eventos; IDs nulos = ferramenta desativada.
+const configTrack = {
+  ga4: site.rastreamento.ga4_id,
+  meta: site.rastreamento.meta_pixel_id,
+  tiktok: site.rastreamento.tiktok_pixel_id,
+  versao: site.versao_politica_cookies,
+  dev: import.meta.env.DEV,
+  plataforma: site.plataforma_checkout,
+};
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    <link rel="canonical" href={canonica} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#0B2342" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={site.nome} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={og} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Logo QUIMICAR ENEM ao lado de páginas reais dos materiais: Raio-X da Questão e mapa visual Ácidos e Bases." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descricao} />
+    <meta name="twitter:image" content={og} />
+
+    <script type="application/ld+json" set:html={JSON.stringify([organizacao, ...jsonLd])} />
+
+    <!-- Google Consent Mode v2: tudo negado até a escolha do visitante. Nenhum script de terceiros é carregado aqui. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('consent', 'default', {
+        ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', wait_for_update: 500,
+      });
+    </script>
+    <script type="application/json" id="config-track" set:html={JSON.stringify(configTrack)} />
+    <slot name="head" />
+  </head>
+  <body class="min-h-dvh">
+    <a href={`#${idConteudo}`} class="sr-only-focusable fixed top-2 left-2 z-[100] rounded-full bg-petroleo px-5 py-3 font-semibold text-branco">
+      Pular para o conteúdo
+    </a>
+    <Cabecalho variante={cabecalho} />
+    <main id="conteudo" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Rodape />
+    <slot name="fim" />
+    <BannerCookies />
+    <script>
+      import { iniciarTrack } from '@/lib/track';
+      import { iniciarUtm } from '@/scripts/utm';
+      import { iniciarRevelar } from '@/scripts/revelar';
+      const el = document.getElementById('config-track');
+      const config = el ? JSON.parse(el.textContent || '{}') : null;
+      if (config) iniciarTrack(config);
+      iniciarUtm(config?.plataforma ?? 'hotmart');
+      iniciarRevelar();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+---
+// 7.10 Quem está por trás — só aparece com nome, foto e biografia aprovados (P-03).
+import { Image } from 'astro:assets';
+import { getSite, imagem } from '@/lib/conteudo';
+const { autoria } = await getSite();
+const completo = autoria.nome && autoria.foto && autoria.bio;
+---
+{completo && (
+  <section id="autoria" aria-labelledby="titulo-autoria" class="secao bg-branco">
+    <div class="container-lp grid max-w-4xl items-center gap-8 md:grid-cols-[auto_1fr] md:gap-12">
+      <div class="mx-auto rounded-full bg-gradient-to-br from-turquesa to-laranja p-1.5">
+        <Image src={imagem(autoria.foto!)} alt={`Foto de ${autoria.nome}`} width={240} height={240} class="size-48 rounded-full border-4 border-branco object-cover md:size-60" loading="lazy" />
+      </div>
+      <div>
+        <p class="rotulo text-turquesa-texto">Quem está por trás</p>
+        <h2 id="titulo-autoria" class="h2 mt-2">{autoria.nome}</h2>
+        <p class="mt-4">{autoria.bio}</p>
+        <p class="mt-4 font-titulo font-bold text-petroleo">Propósito: transformar a forma de aprender Química.</p>
+      </div>
+    </div>
+  </section>
+)}

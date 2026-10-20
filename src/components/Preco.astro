@@ -1,0 +1,16 @@
+---
+// Preço e parcelamento só aparecem para produto vendável (nada provisório).
+import type { Produto } from '@/lib/conteudo';
+import { formatarPreco, vendavel } from '@/lib/produtos';
+interface Props { produto: Produto; grande?: boolean; escuro?: boolean }
+const { produto, grande = false, escuro = false } = Astro.props;
+const mostrar = vendavel(produto) && produto.preco !== null;
+---
+{mostrar && (
+  <div>
+    <p class:list={['font-titulo font-extrabold', grande ? 'text-4xl md:text-5xl' : 'text-3xl', escuro ? 'text-branco' : 'text-petroleo']}>
+      {formatarPreco(produto.preco!)}
+    </p>
+    {produto.parcelamento && <p class:list={['mt-1 text-sm', escuro ? 'text-branco/80' : 'text-cinza-medio']}>{produto.parcelamento}</p>}
+  </div>
+)}

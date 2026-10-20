@@ -1,0 +1,100 @@
+---
+// Banner próprio e leve (seção 10.1). "Recusar" tem o mesmo destaque de "Aceitar".
+import { getSite, linkLegal } from '@/lib/conteudo';
+const site = await getSite();
+const privacidade = await linkLegal('politica-de-privacidade');
+---
+<section
+  id="cookies"
+  class="fixed inset-x-2 bottom-2 z-[60] mx-auto max-h-[85dvh] max-w-2xl overflow-y-auto rounded-2xl border border-cinza-claro bg-branco p-4 shadow-[0_12px_40px_-12px_rgb(11_35_66/0.45)] md:inset-x-4 md:bottom-4 md:p-6"
+  aria-labelledby="cookies-titulo"
+  data-versao={site.versao_politica_cookies}
+  hidden
+>
+  <h2 id="cookies-titulo" class="font-titulo text-base font-bold md:text-lg">Cookies e privacidade</h2>
+  <p class="mt-1 text-sm leading-5 md:mt-2 md:text-[15px] md:leading-6">
+    Usamos cookies necessários para o site funcionar. Com a sua permissão, também usamos cookies de análise e de marketing para
+    entender as visitas e medir anúncios.
+    {privacidade && <>Veja a <a href={privacidade} class="font-semibold text-turquesa-texto underline">Política de Privacidade</a>.</>}
+  </p>
+
+  <form id="cookies-preferencias" class="mt-4 space-y-3" hidden>
+    <fieldset class="space-y-3">
+      <legend class="sr-only">Categorias de cookies</legend>
+      <label class="flex items-start gap-3 rounded-xl bg-cinza-claro/60 p-3">
+        <input type="checkbox" checked disabled class="mt-1 size-5 accent-petroleo" />
+        <span><strong class="text-petroleo">Necessários</strong> <span class="text-sm text-cinza-escuro">· sempre ativos. Guardam sua escolha de cookies.</span></span>
+      </label>
+      <label class="flex items-start gap-3 rounded-xl bg-cinza-claro/60 p-3">
+        <input type="checkbox" name="analise" class="mt-1 size-5 accent-petroleo" />
+        <span><strong class="text-petroleo">Análise</strong> <span class="text-sm text-cinza-escuro">· Google Analytics, para entender como o site é usado.</span></span>
+      </label>
+      <label class="flex items-start gap-3 rounded-xl bg-cinza-claro/60 p-3">
+        <input type="checkbox" name="marketing" class="mt-1 size-5 accent-petroleo" />
+        <span><strong class="text-petroleo">Marketing</strong> <span class="text-sm text-cinza-escuro">· Pixels da Meta e do TikTok, para medir anúncios.</span></span>
+      </label>
+    </fieldset>
+    <button type="submit" class="btn btn-secundario w-full sm:w-auto">Salvar preferências</button>
+  </form>
+
+  <div class="mt-3 grid grid-cols-2 gap-2 sm:flex md:mt-4" id="cookies-acoes">
+    <button type="button" data-cookies="aceitar" class="btn btn-secundario min-h-11 flex-1 py-2">Aceitar</button>
+    <button type="button" data-cookies="recusar" class="btn btn-secundario min-h-11 flex-1 py-2">Recusar</button>
+    <button type="button" data-cookies="preferencias" class="btn col-span-2 min-h-11 flex-1 py-1 text-petroleo underline underline-offset-4 hover:bg-cinza-claro" aria-expanded="false" aria-controls="cookies-preferencias">
+      Preferências
+    </button>
+  </div>
+</section>
+
+<script>
+  import { lerEscolha, salvarEscolha } from '@/lib/consentimento';
+
+  const banner = document.getElementById('cookies')!;
+  const versao = banner.dataset.versao!;
+  const form = document.getElementById('cookies-preferencias') as HTMLFormElement;
+  const btnPref = banner.querySelector<HTMLButtonElement>('[data-cookies="preferencias"]')!;
+  let origem: HTMLElement | null = null;
+
+  const abrir = (comPreferencias = false) => {
+    const atual = lerEscolha(versao);
+    (form.elements.namedItem('analise') as HTMLInputElement).checked = !!atual?.analise;
+    (form.elements.namedItem('marketing') as HTMLInputElement).checked = !!atual?.marketing;
+    banner.hidden = false;
+    form.hidden = !comPreferencias;
+    btnPref.setAttribute('aria-expanded', String(comPreferencias));
+  };
+  const fechar = () => {
+    banner.hidden = true;
+    origem?.focus();
+    origem = null;
+  };
+  const decidir = (analise: boolean, marketing: boolean) => {
+    salvarEscolha({ analise, marketing, versao });
+    fechar();
+  };
+
+  banner.addEventListener('click', (e) => {
+    const acao = (e.target as HTMLElement).closest<HTMLElement>('[data-cookies]')?.dataset.cookies;
+    if (acao === 'aceitar') decidir(true, true);
+    if (acao === 'recusar') decidir(false, false);
+    if (acao === 'preferencias') {
+      form.hidden = !form.hidden;
+      btnPref.setAttribute('aria-expanded', String(!form.hidden));
+      if (!form.hidden) form.querySelector<HTMLInputElement>('input[name="analise"]')?.focus();
+    }
+  });
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    decidir((form.elements.namedItem('analise') as HTMLInputElement).checked, (form.elements.namedItem('marketing') as HTMLInputElement).checked);
+  });
+  document.addEventListener('click', (e) => {
+    const gatilho = (e.target as HTMLElement).closest<HTMLElement>('[data-abrir-cookies]');
+    if (!gatilho) return;
+    origem = gatilho;
+    abrir(true);
+    banner.querySelector<HTMLElement>('h2')?.setAttribute('tabindex', '-1');
+    banner.querySelector<HTMLElement>('h2')?.focus();
+  });
+
+  if (!lerEscolha(versao)) abrir(false);
+</script>

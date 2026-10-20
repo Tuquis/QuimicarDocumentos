@@ -1,0 +1,69 @@
+---
+import Logo from './Logo.astro';
+import Icone from './Icone.astro';
+import { getSite, getPaginasLegaisPublicadas, linkWhatsapp } from '@/lib/conteudo';
+
+const site = await getSite();
+const legais = await getPaginasLegaisPublicadas();
+const naHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
+const base = naHome ? '' : '/';
+const secoes = [
+  { href: `${base}#colecoes`, rotulo: 'Coleções' },
+  { href: `${base}#metodo`, rotulo: 'Como funciona' },
+  { href: `${base}#por-dentro`, rotulo: 'Veja por dentro' },
+  { href: `${base}#amostra`, rotulo: 'Amostra grátis' },
+  { href: `${base}#duvidas`, rotulo: 'Dúvidas' },
+];
+const { email_suporte, whatsapp, instagram, tiktok } = site.contato;
+const wa = linkWhatsapp(whatsapp);
+const { razao_social, cnpj, endereco } = site.fornecedor;
+const ano = new Date().getFullYear();
+---
+<footer id="rodape" class="border-t border-cinza-claro bg-cinza-claro/60 pt-14 pb-10 text-[15px] leading-6">
+  <div class="container-lp grid gap-10 md:grid-cols-[1.3fr_1fr_1fr]">
+    <div>
+      <Logo class="h-11 w-auto" carregamento="lazy" />
+      <p class="mt-4 max-w-sm text-cinza-escuro">Química para visualizar, entender, conectar e aplicar no ENEM.</p>
+      <p class="mt-3 max-w-sm font-semibold text-petroleo">Materiais digitais em PDF para estudo, revisão e impressão pessoal.</p>
+    </div>
+
+    <nav aria-label="Seções">
+      <h2 class="rotulo mb-3 text-petroleo">Navegue</h2>
+      <ul class="space-y-1">
+        {secoes.map((s) => <li><a href={s.href} class="inline-flex min-h-10 items-center text-cinza-escuro underline-offset-4 hover:text-petroleo hover:underline">{s.rotulo}</a></li>)}
+      </ul>
+    </nav>
+
+    <div>
+      {(email_suporte || wa || instagram || tiktok) && (
+        <>
+          <h2 class="rotulo mb-3 text-petroleo">Atendimento</h2>
+          <ul class="space-y-1">
+            {email_suporte && <li><a href={`mailto:${email_suporte}`} class="inline-flex min-h-10 items-center gap-2 text-cinza-escuro hover:text-petroleo hover:underline"><Icone nome="email" class="size-4" />{email_suporte}</a></li>}
+            {wa && <li><a href={wa} class="inline-flex min-h-10 items-center gap-2 text-cinza-escuro hover:text-petroleo hover:underline" rel="noopener" target="_blank"><Icone nome="mensagem" class="size-4" />WhatsApp</a></li>}
+            {instagram && <li><a href={`https://www.instagram.com/${instagram}`} class="inline-flex min-h-10 items-center gap-2 text-cinza-escuro hover:text-petroleo hover:underline" rel="noopener" target="_blank"><Icone nome="instagram" class="size-4" />@{instagram}</a></li>}
+            {tiktok && <li><a href={`https://www.tiktok.com/@${tiktok}`} class="inline-flex min-h-10 items-center gap-2 text-cinza-escuro hover:text-petroleo hover:underline" rel="noopener" target="_blank"><Icone nome="video" class="size-4" />TikTok @{tiktok}</a></li>}
+          </ul>
+        </>
+      )}
+      <h2 class:list={['rotulo mb-3 text-petroleo', (email_suporte || wa || instagram || tiktok) && 'mt-6']}>Políticas</h2>
+      <ul class="space-y-1">
+        {legais.map((p) => <li><a href={`/${p.id}`} class="inline-flex min-h-10 items-center text-cinza-escuro hover:text-petroleo hover:underline">{p.data.titulo}</a></li>)}
+        <li>
+          <button type="button" data-abrir-cookies class="inline-flex min-h-10 items-center text-cinza-escuro underline-offset-4 hover:text-petroleo hover:underline">
+            Gerenciar cookies
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container-lp mt-10 border-t border-petroleo/10 pt-6 text-sm text-cinza-medio">
+    {(razao_social || cnpj) && (
+      <p class="text-cinza-escuro">
+        {razao_social}{razao_social && cnpj && ' · '}{cnpj && `CNPJ ${cnpj}`}{endereco && ` · ${endereco}`}
+      </p>
+    )}
+    <p class="mt-1 text-[#57606c]">© {ano} {site.nome}. Todos os direitos reservados.</p>
+  </div>
+</footer>

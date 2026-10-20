@@ -1,0 +1,135 @@
+---
+// 7.5 Demonstração com páginas reais. Abas CONECTA | APLICA (sem JS: ambas visíveis).
+import TituloSecao from '../TituloSecao.astro';
+import PaginaAmostra from '../PaginaAmostra.astro';
+import Selo from '../Selo.astro';
+import Icone from '../Icone.astro';
+import { getAmostra } from '@/lib/conteudo';
+
+const conecta = await getAmostra('conecta-acidos-e-bases');
+const aplica = await getAmostra('aplica-q100-enem2025');
+const [mapa, questao] = conecta.paginas;
+const abas = [
+  { id: 'conecta', rotulo: 'CONECTA', sub: 'Mapa + questão comentada' },
+  { id: 'aplica', rotulo: 'APLICA', sub: 'Percurso em 4 materiais' },
+];
+const coresEtapa = ['bg-petroleo text-branco', 'bg-turquesa text-petroleo', 'bg-roxo text-branco', 'bg-laranja text-petroleo'];
+---
+<section id="por-dentro" aria-labelledby="titulo-por-dentro" class="secao bg-cinza-claro/50">
+  <div class="container-lp">
+    <TituloSecao id="titulo-por-dentro" rotulo="Páginas reais dos materiais" centralizado>
+      Veja por dentro
+      <p slot="intro">Toque em qualquer página para ampliar e ler com zoom.</p>
+    </TituloSecao>
+
+    <div role="tablist" aria-label="Coleção" class="mx-auto mb-8 hidden max-w-md grid-cols-2 gap-1 rounded-full bg-branco p-1 shadow-cartao [.js_&]:grid" id="por-dentro-abas">
+      {abas.map((a, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`aba-${a.id}`}
+          aria-controls={`por-dentro-${a.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          class="flex min-h-12 flex-col items-center justify-center rounded-full px-3 py-1.5 font-titulo font-extrabold text-petroleo transition-colors aria-selected:bg-petroleo aria-selected:text-branco"
+        >
+          {a.rotulo}
+          <span class="text-[11px] leading-4 font-medium opacity-80">{a.sub}</span>
+        </button>
+      ))}
+    </div>
+
+    <!-- CONECTA -->
+    <div id="por-dentro-conecta" role="tabpanel" aria-labelledby="aba-conecta" data-ver-colecao="conecta" tabindex="-1" class="scroll-mt-28 outline-none">
+      <h3 class="mb-6 font-titulo text-2xl font-extrabold [.js_&]:sr-only">QUIMICAR CONECTA</h3>
+      <div data-galeria class="grid items-center gap-4 md:grid-cols-[1fr_auto_1fr] md:gap-6">
+        <PaginaAmostra caminho={mapa.imagem} alt={mapa.alt} legenda={mapa.legenda} sizes="(min-width: 768px) 420px, 92vw" />
+        <div class="flex flex-row items-center justify-center gap-2 text-center md:flex-col" aria-hidden="true">
+          <span class="flex size-12 items-center justify-center rounded-full bg-laranja text-petroleo shadow-md">
+            <Icone nome="seta" class="size-6 rotate-90 md:rotate-0" />
+          </span>
+          <span class="font-titulo text-sm font-bold text-petroleo">conecta com</span>
+        </div>
+        <PaginaAmostra caminho={questao.imagem} alt={questao.alt} legenda={questao.legenda} sizes="(min-width: 768px) 420px, 92vw" />
+      </div>
+      <p class="mx-auto mt-8 max-w-3xl text-center text-lg leading-8 text-petroleo">
+        O mapa ajuda você a compreender o conceito. A questão comentada mostra como utilizá-lo.
+        <strong class="font-titulo">Você aprende a Química e descobre como ela pode ser cobrada.</strong>
+      </p>
+    </div>
+
+    <!-- APLICA -->
+    <div id="por-dentro-aplica" role="tabpanel" aria-labelledby="aba-aplica" data-ver-colecao="aplica" tabindex="-1" class="mt-16 scroll-mt-28 outline-none [.js_&]:mt-0 [.js_&]:hidden">
+      <h3 class="mb-2 font-titulo text-2xl font-extrabold [.js_&]:sr-only">QUIMICAR APLICA</h3>
+      <p class="mb-6 flex flex-wrap items-center justify-center gap-2 text-center text-[15px]">
+        Um conjunto completo, ligado à mesma questão-base:
+        <Selo tipo="oficial">{aplica.identificacao}</Selo>
+      </p>
+
+      <ol data-galeria class="scrollbar-oculta -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0">
+        {aplica.etapas.map((e, i) => (
+          <li class="flex w-[80%] shrink-0 snap-center flex-col rounded-[16px] bg-branco p-4 shadow-cartao sm:w-[46%] md:w-auto">
+            <div class="flex items-center gap-2.5">
+              <span class:list={['flex size-9 shrink-0 items-center justify-center rounded-full font-titulo font-extrabold', coresEtapa[i]]}>{e.numero}</span>
+              <h4 class="font-titulo text-base leading-5 font-extrabold">{e.nome}</h4>
+            </div>
+            <p class="mt-3 font-titulo font-bold text-turquesa-texto">{e.lema}</p>
+            <p class="mt-1 text-[15px] leading-6">{e.descricao}</p>
+            {e.selo && <Selo tipo={e.selo.includes('autoral') ? 'autoral' : 'oficial'} class="mt-3 self-start">{e.selo}</Selo>}
+            <div class="mt-4">
+              {e.paginas.map((p, j) => (
+                <PaginaAmostra caminho={p.imagem} alt={p.alt} legenda={p.legenda} sizes="(min-width: 768px) 260px, 78vw" mostrarLegenda={false} oculta={j > 0} />
+              ))}
+              {e.paginas.length > 1 && <p class="mt-2 text-sm text-cinza-medio">+ {e.paginas.length - 1} página no lightbox</p>}
+            </div>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-2 text-center text-sm text-cinza-medio md:hidden">Deslize para ver as 4 etapas →</p>
+
+      <blockquote class="mx-auto mt-10 max-w-3xl border-l-4 border-laranja pl-5 text-lg leading-8 text-petroleo md:text-xl">
+        O aprendizado não termina quando você descobre a alternativa correta. Ele continua quando você consegue explicar sua escolha e aplicar o mesmo raciocínio em uma nova questão.
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { iniciarLightbox } from '@/scripts/lightbox';
+  iniciarLightbox();
+
+  const abas = [...document.querySelectorAll<HTMLButtonElement>('#por-dentro-abas [role="tab"]')];
+  const paineis = abas.map((a) => document.getElementById(a.getAttribute('aria-controls')!)!);
+  const selecionar = (i: number, focar = false) => {
+    abas.forEach((a, j) => {
+      a.setAttribute('aria-selected', String(i === j));
+      a.tabIndex = i === j ? 0 : -1;
+      paineis[j].classList.toggle('[.js_&]:hidden', i !== j);
+      paineis[j].hidden = i !== j;
+    });
+    if (focar) abas[i].focus();
+  };
+  abas.forEach((a, i) => {
+    a.addEventListener('click', () => selecionar(i));
+    a.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        selecionar((i + (e.key === 'ArrowRight' ? 1 : abas.length - 1)) % abas.length, true);
+      }
+    });
+  });
+  // Links "Ver o que vem" (#por-dentro-conecta / #por-dentro-aplica) abrem a aba certa.
+  const porHash = () => {
+    const i = paineis.findIndex((p) => `#${p.id}` === location.hash);
+    if (i >= 0) {
+      selecionar(i);
+      document.getElementById('por-dentro')?.scrollIntoView();
+    }
+  };
+  addEventListener('hashchange', porHash);
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#por-dentro-"]');
+    if (a && a.hash === location.hash) porHash();
+  });
+  porHash();
+</script>

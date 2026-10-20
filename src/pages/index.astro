@@ -1,0 +1,61 @@
+---
+import Base from '@/layouts/Base.astro';
+import Hero from '@/components/secoes/Hero.astro';
+import PorQue from '@/components/secoes/PorQue.astro';
+import Colecoes from '@/components/secoes/Colecoes.astro';
+import Metodo from '@/components/secoes/Metodo.astro';
+import PorDentro from '@/components/secoes/PorDentro.astro';
+import Desafio from '@/components/secoes/Desafio.astro';
+import ParaQuem from '@/components/secoes/ParaQuem.astro';
+import Completo from '@/components/secoes/Completo.astro';
+import Depoimentos from '@/components/secoes/Depoimentos.astro';
+import Amostra from '@/components/secoes/Amostra.astro';
+import Autoria from '@/components/secoes/Autoria.astro';
+import Condicoes from '@/components/secoes/Condicoes.astro';
+import Duvidas from '@/components/secoes/Duvidas.astro';
+import CtaFinal from '@/components/secoes/CtaFinal.astro';
+import BarraCtaMobile from '@/components/BarraCtaMobile.astro';
+import { getFaqLp, getProdutos } from '@/lib/conteudo';
+import { vendavel } from '@/lib/produtos';
+
+const { lista } = await getProdutos();
+const faq = await getFaqLp(lista);
+
+// JSON-LD: Product só com preço publicado; FAQPage só com as perguntas exibidas.
+const produtosLd = lista.filter(vendavel).map((p) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: p.nome,
+  description: p.subtitulo,
+  brand: { '@type': 'Brand', name: 'QUIMICAR ENEM' },
+  offers: { '@type': 'Offer', price: p.preco!.toFixed(2), priceCurrency: 'BRL', availability: 'https://schema.org/InStock', url: p.checkout_url },
+}));
+const faqLd = faq.length
+  ? [{
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.pergunta, acceptedAnswer: { '@type': 'Answer', text: f.resposta } })),
+    }]
+  : [];
+---
+<Base
+  titulo="QUIMICAR ENEM | Química visual para o ENEM em PDF"
+  descricao="Mapas visuais, questões comentadas e Raio-X de questões reais do ENEM 2023–2025. Materiais em PDF para entender e aplicar Química. Baixe uma amostra grátis."
+  jsonLd={[...produtosLd, ...faqLd]}
+>
+  <Hero />
+  <PorQue />
+  <Colecoes />
+  <Metodo />
+  <PorDentro />
+  <Desafio />
+  <ParaQuem />
+  <Completo />
+  <Depoimentos />
+  <Amostra />
+  <Autoria />
+  <Condicoes />
+  <Duvidas perguntas={faq} />
+  <CtaFinal />
+  <BarraCtaMobile slot="fim" />
+</Base>

@@ -1,0 +1,124 @@
+# Conjunto completo do APLICA ligado à Questão 100 do ENEM 2025 (Caderno Amarelo).
+colecao: aplica
+titulo: Questão 100 · ENEM 2025
+identificacao: "Questão 100 · ENEM 2025 · Caderno Amarelo"
+entrega_descricao: "1 conjunto completo: Raio-X + Ciência por Trás + Desafio + Resolução (Questão 100 · ENEM 2025)"
+pdfs:
+  - arquivo: /amostras/aplica-q100-enem2025-raio-x-e-ciencia.pdf
+    titulo: Raio-X da Questão + A Ciência por Trás da Questão
+  - arquivo: /amostras/aplica-q100-enem2025-desafio-e-resolucao.pdf
+    titulo: Desafio de Aplicação + Resolução Inteligente
+etapas:
+  - numero: 1
+    nome: Raio-X da Questão
+    lema: Aprenda a interpretar.
+    descricao: Analisa o comando, as pistas do enunciado e as conexões necessárias.
+    selo: "Questão 100 · ENEM 2025 · Caderno Amarelo"
+    paginas:
+      - imagem: amostras/aplica-q100-enem2025/raio-x-1.webp
+        legenda: "APLICA · 1. Raio-X da Questão (p. 1)"
+        alt: "Página 1 do Raio-X da Questão 100 do ENEM 2025: enunciado original sobre ações mitigadoras e CO₂ na atmosfera, alternativas e a pista do enunciado."
+      - imagem: amostras/aplica-q100-enem2025/raio-x-2.webp
+        legenda: "APLICA · 1. Raio-X da Questão (p. 2)"
+        alt: "Página 2 do Raio-X: como a banca pensa, rede de conceitos (ciclo do carbono, fotossíntese, biomassa, mitigação), Método Visual QUIMICAR em cinco etapas, o erro mental mais comum e o caminho de estudo."
+  - numero: 2
+    nome: A Ciência por Trás da Questão
+    lema: Compreenda e justifique.
+    descricao: Aprofunda os conceitos e explica por que cada alternativa está certa ou errada.
+    selo: null
+    paginas:
+      - imagem: amostras/aplica-q100-enem2025/ciencia-1.webp
+        legenda: "APLICA · 2. A Ciência por Trás da Questão (p. 1)"
+        alt: "Página 1 de A Ciência por Trás da Questão: por que a fotossíntese remove CO₂, a transformação nos níveis macroscópico, microscópico e simbólico e o caminho do carbono até a biomassa."
+      - imagem: amostras/aplica-q100-enem2025/ciencia-2.webp
+        legenda: "APLICA · 2. A Ciência por Trás da Questão (p. 2)"
+        alt: "Página 2 de A Ciência por Trás da Questão: justificativa de cada alternativa, diferença entre remoção e emissão evitada, limites do modelo e como responder questões parecidas."
+  - numero: 3
+    nome: Desafio de Aplicação
+    lema: Aplique sozinho.
+    descricao: Questão autoral QUIMICAR em uma situação nova.
+    selo: Questão autoral QUIMICAR
+    paginas:
+      - imagem: amostras/aplica-q100-enem2025/desafio.webp
+        legenda: "APLICA · 3. Desafio de Aplicação"
+        alt: "Desafio de Aplicação, questão autoral QUIMICAR: carbonatação de resíduos de concreto com a equação Ca(OH)₂ + CO₂ → CaCO₃ + H₂O, cinco alternativas e espaço para registrar o próprio caminho nas cinco etapas do método."
+  - numero: 4
+    nome: Resolução Inteligente
+    lema: Compare, revise e evolua.
+    descricao: Gabarito e caminho completo; correção previamente elaborada.
+    selo: null
+    paginas:
+      - imagem: amostras/aplica-q100-enem2025/resolucao-1.webp
+        legenda: "APLICA · 4. Resolução Inteligente (p. 1)"
+        alt: "Página 1 da Resolução Inteligente do desafio: resposta correta B, as cinco etapas do método aplicadas e a justificativa de cada alternativa."
+      - imagem: amostras/aplica-q100-enem2025/resolucao-2.webp
+        legenda: "APLICA · 4. Resolução Inteligente (p. 2)"
+        alt: "Página 2 da Resolução Inteligente: a ciência que sustenta a decisão, da questão real ao desafio, hipóteses para cada alternativa marcada e caminho de estudo para revisar, testar e reaplicar."
+questao_base:
+  identificacao: "Questão 100 · ENEM 2025 · Caderno Amarelo"
+  texto_resumido: >-
+    A quantidade de CO₂ na atmosfera da Terra aumentou em 50%, e a temperatura está
+    cerca de 1,2 °C mais quente em comparação ao século XIX. Os países precisam enfrentar
+    as mudanças climáticas com ações mitigadoras, que reduzam tanto as emissões quanto
+    os níveis de CO₂ na atmosfera.
+  fonte: "Um guia rápido para entender as mudanças climáticas. Disponível em: www.bbc.com. Acesso em: 6 dez. 2021 (adaptado). Texto resumido."
+  pergunta: Qual ação mitigadora auxilia na remoção desse gás presente na atmosfera, reduzindo seus níveis?
+  alternativas:
+    - { letra: A, texto: Plantar mais árvores. }
+    - { letra: B, texto: Instalar mais usinas eólicas. }
+    - { letra: C, texto: Ampliar o uso de energia solar. }
+    - { letra: D, texto: Manter os combustíveis fósseis no solo. }
+    - { letra: E, texto: Produzir menos resíduos sólidos urbanos. }
+  metodo:
+    - { etapa: VISUALIZE, texto: "Encontre “remoção desse gás”." }
+    - { etapa: ENTENDA, texto: "O alvo é o CO₂ que já está no ar." }
+    - { etapa: CONECTE, texto: "A fotossíntese fixa carbono na biomassa." }
+    - { etapa: APLIQUE, texto: "Separe remoção de emissões evitadas." }
+    - { etapa: ACERTE, texto: "Plantar árvores: alternativa A." }
+  nao_confunda: "Eólica, solar e redução do uso de fósseis ajudam principalmente a evitar emissões; isso não é a mesma função solicitada."
+desafio:
+  selo: "Questão autoral QUIMICAR · inspirada na Questão 100 do ENEM 2025"
+  enunciado:
+    - >-
+      Uma fábrica produz blocos utilizando resíduos de concreto. Durante a cura, o material
+      é colocado em uma câmara por onde circula ar enriquecido com dióxido de carbono.
+      Parte desse gás reage com compostos de cálcio presentes no resíduo, conforme a equação:
+  equacao: "Ca(OH)<sub>2</sub>(s) + CO<sub>2</sub>(g) → CaCO<sub>3</sub>(s) + H<sub>2</sub>O(l)"
+  pergunta: "Nesse processo, ocorre remoção de CO₂ da corrente gasosa porque"
+  alternativas:
+    - letra: A
+      texto: impede que os blocos absorvam radiação infravermelha.
+      feedback: A equação não mostra alteração na absorção de radiação pelos blocos. Isso não explica o consumo de CO₂.
+      hipotese: Confira se confundiu efeito estufa com o destino do carbono.
+    - letra: B
+      texto: incorpora o carbono do gás a um composto sólido.
+      feedback: "Correta: o C do CO₂(g) integra o CaCO₃(s). Há retirada de CO₂ da corrente tratada e incorporação ao sólido."
+      hipotese: null
+    - letra: C
+      texto: transforma o dióxido de carbono em oxigênio molecular.
+      feedback: O₂ não é produto da reação. Os produtos indicados são CaCO₃ e H₂O; remoção não exige formar O₂.
+      hipotese: Veja se supôs que toda remoção exige formar O₂.
+    - letra: D
+      texto: mantém o carbono no estado gasoso dentro da câmara.
+      feedback: "Apenas manter o gás na câmara não explica esta reação: parte do CO₂ é consumida e seu carbono passa ao sólido."
+      hipotese: Confira se ignorou o consumo do reagente.
+    - letra: E
+      texto: diminui apenas o consumo energético da fabricação.
+      feedback: O enunciado não demonstra economia energética. Mesmo que ocorresse, ela não explicaria a retirada química de CO₂.
+      hipotese: Veja se trocou remoção por economia de energia.
+  gabarito: B
+  feedback_correta: "Isso! O carbono do CO₂ passa a integrar o CaCO₃ sólido."
+  resolucao:
+    - etapa: VISUALIZE
+      texto: "Encontre “remoção de CO₂ da corrente gasosa”. Na equação, identifique CO₂(g) entre os reagentes e CaCO₃(s) entre os produtos."
+    - etapa: ENTENDA
+      texto: "Explique por que a reação retira CO₂ do gás tratado. Não basta apontar uma possível economia de energia."
+    - etapa: CONECTE
+      texto: "O carbono se conserva nas reações: não desaparece. Ele pode passar de uma substância gasosa para um composto sólido."
+    - etapa: APLIQUE
+      texto: "Acompanhe o C: CO₂(g) → CaCO₃(s). O reagente gasoso é consumido e seu carbono é incorporado ao carbonato."
+    - etapa: ACERTE
+      texto: "Escolha B: há incorporação do carbono a um sólido. Confira se a alternativa explica a remoção, e não apenas uma vantagem ambiental."
+  nao_confunda:
+    titulo: "Não confunda: remoção e emissão evitada"
+    texto: "Retirar CO₂ de um gás é diferente de impedir que ele seja emitido. Aqui, a evidência decisiva é o consumo de CO₂ na reação."

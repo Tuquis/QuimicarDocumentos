@@ -1,0 +1,22 @@
+---
+// VISUALIZE • ENTENDA • CONECTE • APLIQUE • ACERTE nas cores da seção 6.3.
+// Sobre claro, turquesa e laranja usam os tokens de texto acessíveis.
+interface Props { escuro?: boolean; class?: string }
+const { escuro = false, class: classe = '' } = Astro.props;
+const etapas = [
+  { nome: 'VISUALIZE', claro: 'text-petroleo', esc: 'text-branco' },
+  { nome: 'ENTENDA', claro: 'text-turquesa-texto', esc: 'text-turquesa' },
+  { nome: 'CONECTE', claro: 'text-laranja-texto', esc: 'text-laranja' },
+  { nome: 'APLIQUE', claro: 'text-turquesa-texto', esc: 'text-turquesa' },
+  { nome: 'ACERTE', claro: 'text-laranja-texto', esc: 'text-laranja' },
+];
+---
+<p class:list={['flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 font-titulo text-[13px] font-bold tracking-[0.12em] sm:text-sm md:gap-x-4 md:text-base', classe]}>
+  <span class="sr-only">Método Visual QUIMICAR: </span>
+  {etapas.map((e, i) => (
+    <>
+      {i > 0 && <span aria-hidden="true" class={escuro ? 'text-branco/50' : 'text-cinza-medio'}>•</span>}
+      <span class={escuro ? e.esc : e.claro}>{e.nome}</span>
+    </>
+  ))}
+</p>

@@ -1,0 +1,29 @@
+# Dados globais do site. "null" = ainda não fornecido (bloco oculto no site).
+nome: QUIMICAR ENEM
+dominio: null                      # P-16 — ex.: quimicar.com.br
+plataforma_checkout: hotmart       # hotmart | kiwify (P-01)
+fornecedor:                        # P-10
+  razao_social: null
+  cnpj: null
+  endereco: null
+contato:
+  email_suporte: null              # P-09
+  whatsapp: null                   # só números, com DDI: 5511999998888
+  instagram: null                  # usuário, sem @
+  tiktok: null                     # usuário, sem @
+autoria:                           # P-03
+  nome: null
+  foto: null                       # caminho em src/assets/, ex.: autoria/foto.jpg
+  bio: null
+rastreamento:
+  ga4_id: null                     # G-XXXXXXX
+  meta_pixel_id: null
+  tiktok_pixel_id: null
+turnstile_site_key: null           # chave pública do Cloudflare Turnstile
+brevo:
+  lista_amostra_id: null
+  lista_marketing_id: null
+  template_amostra_id: null
+  remetente_email: null            # ex.: contato@quimicar.com.br (domínio autenticado)
+versao_texto_consentimento: "2026-10-v1"
+versao_politica_cookies: "2026-10-v1"

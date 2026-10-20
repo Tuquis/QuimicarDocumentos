@@ -1,0 +1,24 @@
+---
+// 7.9 Amostra grátis (formulário)
+import FormAmostra from '../FormAmostra.astro';
+import Icone from '../Icone.astro';
+---
+<section id="amostra" aria-labelledby="titulo-amostra" class="secao fundo-escuro relative overflow-hidden bg-petroleo">
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-[radial-gradient(40rem_20rem_at_100%_0%,rgb(0_184_217/0.18),transparent_70%),radial-gradient(30rem_20rem_at_0%_100%,rgb(255_144_0/0.14),transparent_70%)]"></div>
+  <div class="container-lp relative grid gap-10 md:grid-cols-[1fr_1.15fr] md:items-center md:gap-14">
+    <div class="text-branco">
+      <p class="rotulo text-turquesa">Amostra grátis</p>
+      <h2 id="titulo-amostra" class="h2 mt-3 text-branco">Experimente a Química visual da QUIMICAR</h2>
+      <p class="mt-4 text-branco/90 md:text-lg">
+        Veja uma prévia ou receba gratuitamente um conjunto completo para estudar e conhecer a proposta.
+      </p>
+      <ul class="mt-6 space-y-3 text-[15px] leading-6 text-branco/90">
+        <li class="flex items-start gap-3"><Icone nome="email" class="mt-0.5 size-5 text-turquesa" /> O PDF chega no seu e-mail, sem cadastro de senha ou conta.</li>
+        <li class="flex items-start gap-3"><Icone nome="arquivo" class="mt-0.5 size-5 text-turquesa" /> Material completo, igual ao das coleções.</li>
+        <li class="flex items-start gap-3"><Icone nome="escudo" class="mt-0.5 size-5 text-turquesa" /> Receber novidades é opcional. Você recebe a amostra de qualquer forma.</li>
+      </ul>
+      <p class="mt-6 text-[15px] text-branco/80">Prefere só olhar antes? <a href="#por-dentro" class="font-semibold text-turquesa underline underline-offset-4">Veja as páginas por dentro</a>.</p>
+    </div>
+    <FormAmostra />
+  </div>
+</section>
